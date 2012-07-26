@@ -1,4 +1,0 @@
-Content\Tex\MainScreen.xnb
-Content\Fonts\TitleFont.xnb
-Content\Fonts\MenuItemFont.xnb
-Content\Tex\Red.xnb
