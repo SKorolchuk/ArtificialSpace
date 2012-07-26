@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Menu", "Menu\Menu\Menu.csproj", "{D60C2104-F841-4958-B38C-9B2A9E9C466A}"
 EndProject
-Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "MenuContent", "Menu\MenuContent\MenuContent.contentproj", "{42E09798-A04F-423B-8DCD-8A2681D53A1A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MenuContent", "Menu\MenuContent\MenuContent.contentproj", "{42E09798-A04F-423B-8DCD-8A2681D53A1A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASpace", "ASpace\ASpace\ASpace.csproj", "{51053624-0A25-4255-95E6-6DAA6D63CD62}"
 EndProject
-Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "ASpaceContent", "ASpace\ASpaceContent\ASpaceContent.contentproj", "{0CC430A5-C17B-4D08-BE10-703E7A7AA47B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASpaceContent", "ASpace\ASpaceContent\ASpaceContent.contentproj", "{0CC430A5-C17B-4D08-BE10-703E7A7AA47B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MenuList", "MenuList\MenuList.csproj", "{7FFDE6EE-FB39-4EEF-8178-41A393957A63}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{51053624-0A25-4255-95E6-6DAA6D63CD62}.Release|x86.Build.0 = Release|x86
 		{0CC430A5-C17B-4D08-BE10-703E7A7AA47B}.Debug|x86.ActiveCfg = Debug|x86
 		{0CC430A5-C17B-4D08-BE10-703E7A7AA47B}.Release|x86.ActiveCfg = Release|x86
+		{7FFDE6EE-FB39-4EEF-8178-41A393957A63}.Debug|x86.ActiveCfg = Debug|x86
+		{7FFDE6EE-FB39-4EEF-8178-41A393957A63}.Debug|x86.Build.0 = Debug|x86
+		{7FFDE6EE-FB39-4EEF-8178-41A393957A63}.Release|x86.ActiveCfg = Release|x86
+		{7FFDE6EE-FB39-4EEF-8178-41A393957A63}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
