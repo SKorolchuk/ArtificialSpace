@@ -4,7 +4,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Tanks
+namespace ASpace
 {
     using System;
     using System.Collections.Generic;
@@ -18,7 +18,7 @@ namespace Tanks
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
-    public class Effect
+    public class Effect : IGame
     {
         public Animation EffectAnimation;
 

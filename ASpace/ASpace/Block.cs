@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ASpace;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Tanks
+namespace ASpace
 {
-    public class Block
+    public class Block : GameObject
     {
         public Texture2D Texture;
         public Rectangle Place;

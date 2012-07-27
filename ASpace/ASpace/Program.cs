@@ -10,10 +10,10 @@ namespace ASpace
         /// </summary>
         static void Main(string[] args)
         {
-            //using (GameLogicLayer game = new GameLogicLayer())
-            //{
-            //    game.Run();
-            //}
+            using (MenuGameLayer game = new MenuGameLayer())
+            {
+              game.Run();
+            }
         }
     }
 #endif
