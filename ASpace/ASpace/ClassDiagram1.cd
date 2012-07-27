@@ -6,6 +6,7 @@
       <HashCode>AAQIAAQAgQAQAwAgAAEAIAQCAAAAQACkAAgQIABAAAA=</HashCode>
       <FileName>Animation.cs</FileName>
     </TypeIdentifier>
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="ASpace.Block">
     <Position X="9.25" Y="5.5" Width="1.5" />

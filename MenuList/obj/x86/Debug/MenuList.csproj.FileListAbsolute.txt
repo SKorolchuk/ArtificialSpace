@@ -1,0 +1,5 @@
+D:\GIT\ArtificialSpace\MenuList\bin\Debug\Menu.xml
+D:\GIT\ArtificialSpace\MenuList\bin\Debug\MenuList.dll
+D:\GIT\ArtificialSpace\MenuList\bin\Debug\MenuList.pdb
+D:\GIT\ArtificialSpace\MenuList\obj\x86\Debug\MenuList.dll
+D:\GIT\ArtificialSpace\MenuList\obj\x86\Debug\MenuList.pdb

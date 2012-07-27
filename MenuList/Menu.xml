@@ -1,0 +1,4 @@
+﻿<Menu id="main" name="Proba">
+  <Item id="item1" name="Play" behavior="LUNCH"/>
+  <Item id="item2" name="Exit" behavior="EXIT"/>
+</Menu>

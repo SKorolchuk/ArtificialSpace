@@ -95,6 +95,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\MenuList\MenuList.csproj">
+      <Project>{7FFDE6EE-FB39-4EEF-8178-41A393957A63}</Project>
+      <Name>MenuList</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ASpaceContent\ASpaceContent.contentproj">
       <Name>ASpaceContent</Name>
       <XnaReferenceType>Content</XnaReferenceType>
