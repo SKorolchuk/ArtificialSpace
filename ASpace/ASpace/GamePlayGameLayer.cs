@@ -34,11 +34,33 @@ namespace ASpace
 
         internal List<string> MusicNames = new List<string>();
 
+        internal Dictionary<string, SoundEffect> Sounds = new Dictionary<string, SoundEffect>(); 
+
         internal Dictionary<string, Texture2D> Effects = new Dictionary<string, Texture2D>(); 
 
         private Random randomizer = new Random((int)DateTime.Now.Ticks);
 
         private Player ship;
+
+        private Vector2 ShiftOfBack;
+
+        private Texture2D mainBackground;
+
+        internal string TerminalMsg = string.Empty;
+
+        bool doonce = true;  
+
+        void CheckMediaPlayerState()
+        {
+            if(MediaPlayer.State != MediaState.Playing) 
+            {  
+                if(doonce) doonce = false;  
+                MediaPlayer.Play(Music[MusicNames[randomizer.Next(0, Music.Count-1)]]);  
+            }  
+            if(MediaPlayer.State == MediaState.Playing)
+                doonce = true;  
+        }
+
 
         public GamePlayGameLayer()
         {
@@ -71,6 +93,10 @@ namespace ASpace
             Textures.Add("PlayerLeft", Content.Load<Texture2D>(@"Tex\PlayerLeft"));
             Textures.Add("PlayerRight", Content.Load<Texture2D>(@"Tex\PlayerRight"));
             Textures.Add("Red", Content.Load<Texture2D>(@"Tex\Red"));
+            Textures.Add("EarthBackground", Content.Load<Texture2D>(@"Tex\EarthBackground"));
+            Textures.Add("ParallaxBackGround", Content.Load<Texture2D>(@"Tex\ParallaxBackGround"));
+            Textures.Add("Interface", Content.Load<Texture2D>(@"Tex\Interface"));
+            Textures.Add("ParallaxSpace", Content.Load<Texture2D>(@"Tex\ParallaxSpace"));
             #endregion
             #region Load Music
             Music.Add("DeusEx", Content.Load<Song>(@"Music\Vi_Zav_track"));
@@ -84,12 +110,19 @@ namespace ASpace
             Fonts.Add("Title", Content.Load<SpriteFont>(@"Fonts\TitleFont"));
             Fonts.Add("Simple", Content.Load<SpriteFont>(@"Fonts\MenuItemFont"));
             #endregion
+            #region Load Sound Effects
+            Sounds.Add("Blast1", Content.Load<SoundEffect>(@"Sounds\Blast1"));
+            Sounds.Add("Blast2", Content.Load<SoundEffect>(@"Sounds\Blast2"));
+            Sounds.Add("Blast3", Content.Load<SoundEffect>(@"Sounds\Blast3"));
+            Sounds.Add("Blast4", Content.Load<SoundEffect>(@"Sounds\Blast4"));
+            #endregion
             #region Load Effects
             #endregion
             #endregion
-            MediaPlayer.Play(Music["Crysis"]);
-            MediaPlayer.Volume = 0.5f;           
-            ship = new Player(new Animation(Textures["PlayerUp"], new Vector2(200, 200), 80, 200, 1, 24, Color.White, 1.0f, true), Textures["PlayerLeft"], Textures["PlayerRight"]);
+            ship = new Player(new Animation(Textures["PlayerUp"], new Vector2(graphics.PreferredBackBufferWidth / 2, graphics.PreferredBackBufferHeight/2), 80, 200, 1, 24, Color.White, 1.0f, true), Textures["PlayerLeft"], Textures["PlayerRight"]);
+            ShiftOfBack = new Vector2(0, 0);
+            mainBackground = Textures["ParallaxSpace"];
+            TerminalMsg += "System is under control...\n";
         }
 
         /// <summary>
@@ -124,17 +157,96 @@ namespace ASpace
             if (PrevState.IsKeyDown(Keys.Q))
                 this.Exit();
             if (PrevState.IsKeyDown(Keys.W))
-                ship.Move(4, Animation.Way.Up, GameScreenRect);
+            {
+                ship.Move(10, Animation.Way.Up, GameScreenRect);
+                ShiftOfBack.Y += 4;
+            }
             else if (PrevState.IsKeyDown(Keys.S))
-                ship.Move(3, Animation.Way.Down, GameScreenRect);
+            {
+                ship.Move(6, Animation.Way.Down, GameScreenRect);
+                ShiftOfBack.Y -= 2;
+            }
             else if (PrevState.IsKeyDown(Keys.A))
-                ship.Move(2, Animation.Way.Left, GameScreenRect);
+            {
+                ship.Move(4, Animation.Way.Left, GameScreenRect);
+            }
             else if (PrevState.IsKeyDown(Keys.D))
-                ship.Move(2, Animation.Way.Right, GameScreenRect);
-            else ship.Move(0, Animation.Way.Up, GameScreenRect);
+            {
+                ship.Move(4, Animation.Way.Right, GameScreenRect);
+            }
+            else
+            {
+                ship.Move(0, Animation.Way.Up, GameScreenRect);
+            }
+            if (PrevState.IsKeyDown(Keys.Up) && CurState.IsKeyUp(Keys.Up) && MediaPlayer.Volume < 1.0f)
+                MediaPlayer.Volume += 0.1f;
+            if (PrevState.IsKeyDown(Keys.Down) && CurState.IsKeyUp(Keys.Up) && MediaPlayer.Volume > 0.0f)
+                MediaPlayer.Volume -= 0.1f;
+            SpellUpdate(gameTime);
             PrevState = CurState;
             ship.Update(gameTime);
+            UpdateParallax();
+            RecalcTerminal();
+            CheckMediaPlayerState();
             base.Update(gameTime);
+        }
+
+        private void SpellUpdate(GameTime gameTime)
+        {
+            if (PrevState.IsKeyDown(Keys.D1) && CurState.IsKeyUp(Keys.D1))
+            {
+                Sounds["Blast1"].Play();
+                TerminalMsg += string.Format("{0}You use blaster 1...\n", TerminalMsg);
+            }
+            if (PrevState.IsKeyDown(Keys.D2) && CurState.IsKeyUp(Keys.D2))
+            {
+                Sounds["Blast2"].Play();
+                TerminalMsg += string.Format("{0}You use blaster 2...\n", TerminalMsg);
+            }
+            if (PrevState.IsKeyDown(Keys.D3) && CurState.IsKeyUp(Keys.D3))
+            {
+                Sounds["Blast3"].Play();
+                TerminalMsg += string.Format("{0}You use blaster 3...\n", TerminalMsg);
+            }
+            if (PrevState.IsKeyDown(Keys.D4) && CurState.IsKeyUp(Keys.D4))
+            {
+                Sounds["Blast4"].Play();
+                TerminalMsg += string.Format("{0}You use blaster 4...\n", TerminalMsg);
+            }
+        }
+
+        private void UpdateParallax()
+        {
+            if (ShiftOfBack.X < 0)
+            {
+                ShiftOfBack.X += mainBackground.Width;
+            }
+            else if (ShiftOfBack.X >= mainBackground.Width)
+            {
+                ShiftOfBack.X -= mainBackground.Width;
+            }
+            if (ShiftOfBack.Y < 0)
+            {
+                ShiftOfBack.Y += mainBackground.Height;
+            }
+            else if (ShiftOfBack.Y >= mainBackground.Height)
+            {
+                ShiftOfBack.Y -= mainBackground.Height;
+            }
+            ShiftOfBack.Y += 10;
+        }
+
+        void RecalcTerminal()
+        {
+            string[] terminalColocations = TerminalMsg.Split('\n');
+            TerminalMsg = string.Empty;
+            for (int i = ((terminalColocations.Length-5) > 0) ? terminalColocations.Length-5 : 0; i < terminalColocations.Length; i++)
+            {
+                if (terminalColocations[i].Length > 1)
+                {
+                    TerminalMsg += string.Format("{0}\n", terminalColocations[i]);
+                }
+            }
         }
 
         /// <summary>
@@ -146,11 +258,18 @@ namespace ASpace
             GraphicsDevice.Clear(Color.CornflowerBlue);
             // TODO: Add your drawing code here
             base.Draw(gameTime);
-            spriteBatch.Begin();
-            spriteBatch.Draw(Textures["MainBackGround"], GameScreenRect, Color.White);
+            spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.LinearWrap, null, null);
+            spriteBatch.Draw(mainBackground, new Vector2(0, 0), new Rectangle((int)(-ShiftOfBack.X), (int)(-ShiftOfBack.Y), mainBackground.Width, mainBackground.Height), Color.White);
             ship.Draw(spriteBatch);
-            spriteBatch.Draw(Textures["BackGroundSparks"], GameScreenRect, Color.White);
+            DrawInterface();
             spriteBatch.End();
+        }
+
+        private void DrawInterface()
+        {
+            spriteBatch.Draw(Textures["BackGroundSparks"], GameScreenRect, Color.White);
+            spriteBatch.Draw(Textures["Interface"], GameScreenRect, Color.White);
+            spriteBatch.DrawString(Fonts["Simple"], TerminalMsg, new Vector2(90, 50), Color.White);
         }
     }
 }
