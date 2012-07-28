@@ -32,9 +32,11 @@ namespace ASpace
 
         internal Dictionary<string, Song> Music = new Dictionary<string, Song>();
 
+        internal List<string> MusicNames = new List<string>();
+
         internal Dictionary<string, Texture2D> Effects = new Dictionary<string, Texture2D>(); 
 
-        private Random randomizer = new Random(DateTime.Now.Millisecond);
+        private Random randomizer = new Random((int)DateTime.Now.Ticks);
 
         private Player ship;
 
@@ -72,8 +74,11 @@ namespace ASpace
             #endregion
             #region Load Music
             Music.Add("DeusEx", Content.Load<Song>(@"Music\Vi_Zav_track"));
+            MusicNames.Add("DeusEx");
             Music.Add("Crysis", Content.Load<Song>(@"Music\Ha_Zm_track"));
+            MusicNames.Add("Crysis");
             Music.Add("MassEffect", Content.Load<Song>(@"Music\Ma_Ef_track"));
+            MusicNames.Add("MassEffect");
             #endregion
             #region Load Fonts
             Fonts.Add("Title", Content.Load<SpriteFont>(@"Fonts\TitleFont"));
@@ -82,8 +87,8 @@ namespace ASpace
             #region Load Effects
             #endregion
             #endregion
-            MediaPlayer.Play(Music["MassEffect"]);
-            MediaPlayer.IsRepeating = true;
+            MediaPlayer.Play(Music["Crysis"]);
+            MediaPlayer.Volume = 0.5f;           
             ship = new Player(new Animation(Textures["PlayerUp"], new Vector2(200, 200), 80, 200, 1, 24, Color.White, 1.0f, true), Textures["PlayerLeft"], Textures["PlayerRight"]);
         }
 
@@ -126,6 +131,7 @@ namespace ASpace
                 ship.Move(2, Animation.Way.Left, GameScreenRect);
             else if (PrevState.IsKeyDown(Keys.D))
                 ship.Move(2, Animation.Way.Right, GameScreenRect);
+            else ship.Move(0, Animation.Way.Up, GameScreenRect);
             PrevState = CurState;
             ship.Update(gameTime);
             base.Update(gameTime);

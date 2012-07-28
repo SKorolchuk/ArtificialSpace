@@ -15,8 +15,6 @@ namespace ASpace
 {
     public class Player : GameObject, IGame
     {
-        private bool Alive;
-
         private Texture2D leftTex;
         private Texture2D rightTex;
         private Texture2D commonTex;
@@ -43,24 +41,18 @@ namespace ASpace
             rightTex = rightTexture;
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch)
         {
             if (Alive)
                 base.Animation.Draw(spriteBatch);
         }
 
-        public void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             base.Animation.Update(gameTime);
         }
 
-        public void InflictDamage(int dmg)
-        {
-            if ((base.HP - dmg) < 0) Alive = false;
-            else base.HP -= dmg;
-        }
-
-        public void Move(int value, Animation.Way way, Rectangle display)
+        public override void Move(int value, Animation.Way way, Rectangle display)
         {
             if (way == Animation.Way.Left)
             {
