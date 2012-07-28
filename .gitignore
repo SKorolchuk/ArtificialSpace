@@ -1,17 +1,10 @@
 # Build and Release Folders
 bin-debug/
 bin-release/
-ASpace/ASpace/bin/
 ASpace/ASpace/obj/
-ASpace/ASpaceContent/bin/
 ASpace/ASpaceContent/obj/
-Menu/Menu/bin/
 Menu/Menu/obj/
-Menu/MenuContent/bin/
-Menu/MenuContent/bin/
-MenuList/MenuList/bin/
 MenuList/MenuList/obj/
-MenuList/MenuListContent/bin/
 MenuList/MenuListContent/obj/
 _ReSharper.ArtificialSpace/
 

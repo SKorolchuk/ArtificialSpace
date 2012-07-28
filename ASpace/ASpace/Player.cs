@@ -13,61 +13,68 @@ using Microsoft.Xna.Framework.Media;
 
 namespace ASpace
 {
-    //public class Player
-    //{
-    //    private bool Alive;
-
-    //    private int Health;
-
-    //    private Animation PlayerAnimation;
-
-    //    // Initialize the player
-    //    public void Initialize(Animation animation)
-    //    {
-    //        PlayerAnimation = animation;
-
-    //        // Set the starting position of the player around the middle of the screen and to the back
-    //        PlayerAnimation.Position = position;
-
-    //        // Set the player to be active
-    //        Alive = true;
-
-    //        // Set the player health
-    //        Health = 150;
-            
-    //    }
-
-    //    // Draw the player
-    //    public void Draw(SpriteBatch spriteBatch)
-    //    {
-    //        if (Alive)
-    //        PlayerAnimation.Draw(spriteBatch);
-    //    }
-
-    //    // Update the player animation
-    //    public void Update(GameTime gameTime)
-    //    {
-    //        PlayerAnimation.Update(gameTime);
-    //    }
-
-    //    public void InflictDamage(int dmg)
-    //    {
-    //        if ((Health - dmg) < 0) Alive = false;
-    //        else Health -= dmg;
-    //    }
-
-    //    //public void 
-    //}
     public class Player : GameObject, IGame
     {
+        private bool Alive;
+
+        private Texture2D leftTex;
+        private Texture2D rightTex;
+        private Texture2D commonTex;
+
+        public Player(Animation animation, Texture2D leftTexture, Texture2D rightTexture)
+        {
+            this.Initialize(animation, leftTexture, rightTexture);
+            
+        }
+
+        // Initialize the player
+        public void Initialize(Animation animation, Texture2D leftTexture, Texture2D rightTexture)
+        {
+            base.Animation = animation;
+
+            // Set the player to be active
+            Alive = true;
+
+            // Set the player health
+            base.HP = 150;
+
+            commonTex = animation.ObjectTexture;
+            leftTex = leftTexture;
+            rightTex = rightTexture;
+        }
+
         public void Draw(SpriteBatch spriteBatch)
         {
-            throw new NotImplementedException();
+            if (Alive)
+                base.Animation.Draw(spriteBatch);
         }
 
         public void Update(GameTime gameTime)
         {
-            throw new NotImplementedException();
+            base.Animation.Update(gameTime);
+        }
+
+        public void InflictDamage(int dmg)
+        {
+            if ((base.HP - dmg) < 0) Alive = false;
+            else base.HP -= dmg;
+        }
+
+        public void Move(int value, Animation.Way way, Rectangle display)
+        {
+            if (way == Animation.Way.Left)
+            {
+                Animation.ObjectTexture = leftTex;
+            }
+            if (way == Animation.Way.Right)
+            {
+                Animation.ObjectTexture = rightTex;
+            }
+            if (way == Animation.Way.Down || way == Animation.Way.Up)
+            {
+                Animation.ObjectTexture = commonTex;
+            }
+            Animation.Move(value, way, display);
         }
     }
 }

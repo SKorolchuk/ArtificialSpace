@@ -46,13 +46,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Tex\MainScreen.jpg">
-      <Name>MainScreen</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Tex\Red.tga">
       <Name>Red</Name>
       <Importer>TextureImporter</Importer>
@@ -61,8 +54,61 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Effects\" />
-    <Folder Include="Music\" />
     <Folder Include="Sounds\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Music\Ha_Zm_track.mp3">
+      <Name>Ha_Zm_track</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SongProcessor</Processor>
+    </Compile>
+    <Compile Include="Music\Vi_Zav_track.mp3">
+      <Name>Vi_Zav_track</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SongProcessor</Processor>
+    </Compile>
+    <Compile Include="Music\Ma_Ef_track.mp3">
+      <Name>Ma_Ef_track</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SongProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Tex\Asteroid2.tga">
+      <Name>Asteroid2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Tex\BackGroundSparks.tga">
+      <Name>BackGroundSparks</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Tex\Hole.tga">
+      <Name>Hole</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Tex\MainBackGround.tga">
+      <Name>MainBackGround</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Tex\PlayerLeft.tga">
+      <Name>PlayerLeft</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Tex\PlayerRight.tga">
+      <Name>PlayerRight</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Tex\PlayerUp.tga">
+      <Name>PlayerUp</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
   <!--  To modify your build process, add your task inside one of the targets below and uncomment it. 

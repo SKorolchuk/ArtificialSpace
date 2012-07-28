@@ -14,6 +14,15 @@ namespace ASpace
 {
     public class Animation : IGame
     {
+
+        public enum Way
+        {
+            Left = 0,
+            Right = 1,
+            Up = 2,
+            Down = 3
+        }
+
         #region private fields
         Texture2D spriteStrip;
 
@@ -31,25 +40,30 @@ namespace ASpace
 
         private Rectangle sRect;
 
-        private Rectangle destRect;
+        public Rectangle destRect;
 
         private int frameWidth;
 
         private int frameHeight;
 
-        private bool active;
+        public bool active;
 
-        private bool looping;
+        public bool looping;
 
         private Vector2 position;
-        private float angle;
+        public float angle;
         #endregion
 
         #region public fields
         /// <summary>
         /// Gets Position of Animation Object.
         /// </summary>
-        public Vector2 Position { get { return position; } }
+        public Vector2 Position { get { return position; }}
+
+        /// <summary>
+        /// Set Sepecified texture to the object
+        /// </summary>
+        public Texture2D ObjectTexture { get { return spriteStrip; } set { spriteStrip = value; } }
 
         /// <summary>
         /// Gets Destination Rectangle.
@@ -98,6 +112,31 @@ namespace ASpace
             this.active = true;
         }
 
+        public void Move(int value, Way way, Rectangle display)
+        {
+            switch (way)
+            {
+                    case Way.Up:
+                    if (display.Contains(new Point((int)position.X, (int)(position.Y - value))))
+                        position.Y -= value;
+                    break;
+                    case Way.Down:
+                    if (display.Contains(new Point((int)position.X, (int)(position.Y + value))))
+                        position.Y += value;
+                    break;
+                    case Way.Left:
+                    if (display.Contains(new Point((int)(position.X - value), (int)position.Y)))
+                        position.X -= value;
+                    break;
+                    case Way.Right:
+                    if (display.Contains(new Point((int)(position.X + value), (int)position.Y)))
+                        position.X += value;
+                    break;
+                default:
+                    break;
+            }
+        }
+
         public void Draw(SpriteBatch spriteBatch)
         {
                 spriteBatch.Draw(spriteStrip, destRect, sRect, color);
@@ -135,7 +174,7 @@ namespace ASpace
             // Do not update the game if we are not active
             if (this.active == false)
             {
-                sRect.X = (int)angle * 2 * frameWidth;
+                sRect.X = (int)angle * frameWidth;
                 sRect.Y = 0;
                 sRect.Width = frameWidth;
                 sRect.Height = this.frameHeight;
@@ -169,7 +208,7 @@ namespace ASpace
             }
 
             // Grab the correct frame in the image strip by multiplying the currentFrame index by the frame width
-            sRect.X = (int)angle * frameWidth * 2 + currentFrame * frameWidth;
+            sRect.X = (int)angle * frameWidth + currentFrame * frameWidth;
             sRect.Y = 0;
             sRect.Width = frameWidth;
             sRect.Height = this.frameHeight;

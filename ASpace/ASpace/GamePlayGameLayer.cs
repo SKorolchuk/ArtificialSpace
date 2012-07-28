@@ -20,27 +20,32 @@ namespace ASpace
         /// <summary>
         /// Contains space of action screen
         /// </summary>
-        private Rectangle GameScreenRect;
+        internal Rectangle GameScreenRect;
 
-        private Texture2D BackGround;
+        internal KeyboardState CurState;
 
-        private SpriteFont mainFont;
+        internal KeyboardState PrevState;
 
-        private SpriteFont backFont;
+        internal Dictionary<string, Texture2D> Textures = new Dictionary<string, Texture2D>();
 
-        private KeyboardState CurState;
+        internal Dictionary<string, SpriteFont> Fonts = new Dictionary<string, SpriteFont>();
 
-        private KeyboardState PrevState;
+        internal Dictionary<string, Song> Music = new Dictionary<string, Song>();
 
-        private int selectedindex;
+        internal Dictionary<string, Texture2D> Effects = new Dictionary<string, Texture2D>(); 
+
+        private Random randomizer = new Random(DateTime.Now.Millisecond);
+
+        private Player ship;
 
         public GamePlayGameLayer()
         {
             graphics = new GraphicsDeviceManager(this);
             IsMouseVisible = true;
-            graphics.IsFullScreen = true;
+            graphics.IsFullScreen = false;
             graphics.PreferredBackBufferHeight = 768;
             graphics.PreferredBackBufferWidth = 1366;
+            GameScreenRect = new Rectangle(0,0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
             Content.RootDirectory = "Content";
         }
 
@@ -53,8 +58,33 @@ namespace ASpace
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-
             base.Initialize();
+            #region Load Content
+            #region Load Textures
+            Textures.Add("MainBackGround", Content.Load<Texture2D>(@"Tex\MainBackGround"));
+            Textures.Add("BackGroundSparks", Content.Load<Texture2D>(@"Tex\BackGroundSparks"));
+            Textures.Add("Asteroid2", Content.Load<Texture2D>(@"Tex\Asteroid2"));
+            Textures.Add("Hole", Content.Load<Texture2D>(@"Tex\Hole"));
+            Textures.Add("PlayerUp", Content.Load<Texture2D>(@"Tex\PlayerUp"));
+            Textures.Add("PlayerLeft", Content.Load<Texture2D>(@"Tex\PlayerLeft"));
+            Textures.Add("PlayerRight", Content.Load<Texture2D>(@"Tex\PlayerRight"));
+            Textures.Add("Red", Content.Load<Texture2D>(@"Tex\Red"));
+            #endregion
+            #region Load Music
+            Music.Add("DeusEx", Content.Load<Song>(@"Music\Vi_Zav_track"));
+            Music.Add("Crysis", Content.Load<Song>(@"Music\Ha_Zm_track"));
+            Music.Add("MassEffect", Content.Load<Song>(@"Music\Ma_Ef_track"));
+            #endregion
+            #region Load Fonts
+            Fonts.Add("Title", Content.Load<SpriteFont>(@"Fonts\TitleFont"));
+            Fonts.Add("Simple", Content.Load<SpriteFont>(@"Fonts\MenuItemFont"));
+            #endregion
+            #region Load Effects
+            #endregion
+            #endregion
+            MediaPlayer.Play(Music["MassEffect"]);
+            MediaPlayer.IsRepeating = true;
+            ship = new Player(new Animation(Textures["PlayerUp"], new Vector2(200, 200), 80, 200, 1, 24, Color.White, 1.0f, true), Textures["PlayerLeft"], Textures["PlayerRight"]);
         }
 
         /// <summary>
@@ -86,9 +116,18 @@ namespace ASpace
         {
             CurState = Keyboard.GetState();
             // Allows the game to exit
-            if (CurState.IsKeyUp(Keys.Q) && PrevState.IsKeyDown(Keys.Q))
+            if (PrevState.IsKeyDown(Keys.Q))
                 this.Exit();
+            if (PrevState.IsKeyDown(Keys.W))
+                ship.Move(4, Animation.Way.Up, GameScreenRect);
+            else if (PrevState.IsKeyDown(Keys.S))
+                ship.Move(3, Animation.Way.Down, GameScreenRect);
+            else if (PrevState.IsKeyDown(Keys.A))
+                ship.Move(2, Animation.Way.Left, GameScreenRect);
+            else if (PrevState.IsKeyDown(Keys.D))
+                ship.Move(2, Animation.Way.Right, GameScreenRect);
             PrevState = CurState;
+            ship.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -102,6 +141,9 @@ namespace ASpace
             // TODO: Add your drawing code here
             base.Draw(gameTime);
             spriteBatch.Begin();
+            spriteBatch.Draw(Textures["MainBackGround"], GameScreenRect, Color.White);
+            ship.Draw(spriteBatch);
+            spriteBatch.Draw(Textures["BackGroundSparks"], GameScreenRect, Color.White);
             spriteBatch.End();
         }
     }
