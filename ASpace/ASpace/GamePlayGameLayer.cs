@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,6 +18,10 @@ namespace ASpace
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        internal World map;
+
+        internal Interactivity activities;
+
         /// <summary>
         /// Contains space of action screen
         /// </summary>
@@ -25,6 +30,8 @@ namespace ASpace
         internal KeyboardState CurState;
 
         internal KeyboardState PrevState;
+
+        internal MouseState MouseSt;
 
         internal Dictionary<string, Texture2D> Textures = new Dictionary<string, Texture2D>();
 
@@ -48,6 +55,10 @@ namespace ASpace
 
         internal string TerminalMsg = string.Empty;
 
+        private Sprite simpleSprite;
+
+        private SpriteText simpleText;
+
         bool doonce = true;  
 
         void CheckMediaPlayerState()
@@ -66,7 +77,7 @@ namespace ASpace
         {
             graphics = new GraphicsDeviceManager(this);
             IsMouseVisible = true;
-            graphics.IsFullScreen = false;
+            graphics.IsFullScreen = true;
             graphics.PreferredBackBufferHeight = 768;
             graphics.PreferredBackBufferWidth = 1366;
             GameScreenRect = new Rectangle(0,0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
@@ -97,6 +108,7 @@ namespace ASpace
             Textures.Add("ParallaxBackGround", Content.Load<Texture2D>(@"Tex\ParallaxBackGround"));
             Textures.Add("Interface", Content.Load<Texture2D>(@"Tex\Interface"));
             Textures.Add("ParallaxSpace", Content.Load<Texture2D>(@"Tex\ParallaxSpace"));
+            Textures.Add("gradient", Content.Load<Texture2D>(@"Tex\spr2"));
             #endregion
             #region Load Music
             Music.Add("DeusEx", Content.Load<Song>(@"Music\Vi_Zav_track"));
@@ -122,6 +134,11 @@ namespace ASpace
             ship = new Player(new Animation(Textures["PlayerUp"], new Vector2(graphics.PreferredBackBufferWidth / 2, graphics.PreferredBackBufferHeight/2), 80, 200, 1, 24, Color.White, 1.0f, true), Textures["PlayerLeft"], Textures["PlayerRight"]);
             ShiftOfBack = new Vector2(0, 0);
             mainBackground = Textures["ParallaxSpace"];
+
+            simpleSprite = new Sprite(Textures["gradient"]);
+            simpleSprite.OriginToCenter();
+            simpleText = new SpriteText(Fonts["Simple"], new Vector2(30, 40));
+            simpleText.SpriteColor = Color.Red;
             TerminalMsg += "System is under control...\n";
         }
 
@@ -153,6 +170,7 @@ namespace ASpace
         protected override void Update(GameTime gameTime)
         {
             CurState = Keyboard.GetState();
+            MouseSt = Mouse.GetState();
             // Allows the game to exit
             if (PrevState.IsKeyDown(Keys.Q))
                 this.Exit();
@@ -182,6 +200,7 @@ namespace ASpace
                 MediaPlayer.Volume += 0.1f;
             if (PrevState.IsKeyDown(Keys.Down) && CurState.IsKeyUp(Keys.Up) && MediaPlayer.Volume > 0.0f)
                 MediaPlayer.Volume -= 0.1f;
+            if (Math.Sqrt(Math.Pow((simpleSprite.SpriteLocation.X - MouseSt.X - 1), 2) + Math.Pow((simpleSprite.SpriteLocation.X - MouseSt.X - 1), 2)))
             SpellUpdate(gameTime);
             PrevState = CurState;
             ship.Update(gameTime);
