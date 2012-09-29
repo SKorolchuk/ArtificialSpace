@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Tanks;
-
 namespace ASpace
 {
     public class Terrain : GameObject, IGame

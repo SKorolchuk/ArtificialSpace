@@ -4,67 +4,57 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
-namespace Tanks
+namespace ASpace
 {
     using Microsoft.Xna.Framework.Audio;
 
-    //public class Missle
-    //{
-    //    public bool Alive;
+    public class Missle
+    {
+        public bool Alive;
 
-    //    public int Angle;
+        public int Angle;
 
-    //    public int RemoveValue;
+        public int RemoveValue;
 
-    //    public int Speed;
+        public int Speed;
 
-    //    public Animation MissleAnimation;
+        public Animation MissleAnimation;
 
-    //    public Player Owner;
+        private MouseState mouse;
 
-    //    public SoundEffect MissleEffect;
+        // Initialize the player
+        public void Initialize(Animation animation, int inflictDmg, Vector2 angle, int speed, Vector2 basis)
+        {
+            MissleAnimation = animation;
 
-    //    // Initialize the player
-    //    public void Initialize(Animation animation, Vector2 position, int inflictDmg, float angle, int speed, Player owner, SoundEffect explosionEffect)
-    //    {
-    //        MissleAnimation = animation;
+            // Set the player to be active
+            Alive = true;
+            MissleAnimation.angle = angle;
 
-    //        // Set the starting position of the player around the middle of the screen and to the back
-    //        MissleAnimation.Position = position;
+            // Set the player health
+            RemoveValue = inflictDmg;
 
-    //        // Set the player to be active
-    //        Alive = true;
-    //        MissleAnimation.Angle = angle;
+            Speed = speed;
+            MissleAnimation.speed = speed;
+            MissleAnimation.angle = basis;
+        }
 
-    //        // Set the player health
-    //        RemoveValue = inflictDmg;
+        // Draw the player
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            if (Alive)
+                MissleAnimation.Draw(spriteBatch);
+        }
 
-    //        Speed = speed;
-    //        this.Owner = owner;
-    //        this.MissleEffect = explosionEffect;
-    //    }
-
-    //    // Draw the player
-    //    public void Draw(SpriteBatch spriteBatch)
-    //    {
-    //        if (Alive)
-    //                 MissleAnimation.Draw(spriteBatch);
-    //    }
-
-    //    // Update the player animation
-    //    public void Update(GameTime gameTime)
-    //    {
-    //        if (!Alive) return;
-    //        MissleAnimation.Update(gameTime);
-    //        if (MissleAnimation.Angle == 0)
-    //            MissleAnimation.Position.Y-=Speed;
-    //        if (MissleAnimation.Angle == 1)
-    //            MissleAnimation.Position.X+=Speed;
-    //        if (MissleAnimation.Angle == 2)
-    //            MissleAnimation.Position.Y+=Speed;
-    //        if (MissleAnimation.Angle == 3)
-    //            MissleAnimation.Position.X-=Speed;
-    //    }
-    //}
+        // Update the player animation
+        public void Update(GameTime gameTime)
+        {
+            if (!Alive) return;
+            MissleAnimation.Update(gameTime);
+            MissleAnimation.Going();
+           // MissleAnimation.Going(Speed);
+        }
+    }
 }

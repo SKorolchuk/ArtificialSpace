@@ -99,9 +99,9 @@ namespace ASpace
             elapsedGameTime = (float)Time.ElapsedGameTime.TotalSeconds;
 
             // Обновление цвета и прозрачности на основе исходных данных.
-            SpriteColor = new Color(
-              new Color(ColorStart.ToVector3() + ColorDelta * (float)Counter), (TransparencyStart + TransparencyDelta * (float)Counter));
-            // Обновление масштаба на основе исходных данных.
+            //SpriteColor = new Color(
+            //  new Color(ColorStart.ToVector3() + ColorDelta * (float)Counter), (TransparencyStart + TransparencyDelta * (float)Counter));
+            //// Обновление масштаба на основе исходных данных.
             SpriteScale = (float)(ScaleStart + ScaleDelta * Counter);
             // Обновление положения и угла поворота.
             // Приращение угла поворота.

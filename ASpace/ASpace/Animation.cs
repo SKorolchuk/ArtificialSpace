@@ -14,6 +14,7 @@ namespace ASpace
 {
     public class Animation : IGame
     {
+        private MouseState mouse;
 
         public enum Way
         {
@@ -50,15 +51,17 @@ namespace ASpace
 
         public bool looping;
 
-        private Vector2 position;
-        public float angle;
+        public Vector2 position;
+        public Vector2 angle;
+
+        public float speed;
         #endregion
 
         #region public fields
         /// <summary>
         /// Gets Position of Animation Object.
         /// </summary>
-        public Vector2 Position { get { return position; }}
+        public Vector2 Position { get { return position; } set { position = value; }}
 
         /// <summary>
         /// Set Sepecified texture to the object
@@ -174,7 +177,7 @@ namespace ASpace
             // Do not update the game if we are not active
             if (this.active == false)
             {
-                sRect.X = (int)angle * frameWidth;
+                sRect.X = (int)angle.X * frameWidth;
                 sRect.Y = 0;
                 sRect.Width = frameWidth;
                 sRect.Height = this.frameHeight;
@@ -208,7 +211,7 @@ namespace ASpace
             }
 
             // Grab the correct frame in the image strip by multiplying the currentFrame index by the frame width
-            sRect.X = (int)angle * frameWidth + currentFrame * frameWidth;
+            sRect.X = (int)angle.X * frameWidth + currentFrame * frameWidth;
             sRect.Y = 0;
             sRect.Width = frameWidth;
             sRect.Height = this.frameHeight;
@@ -217,6 +220,12 @@ namespace ASpace
             destRect.Y = (int)this.position.Y - (int)(this.frameHeight * scale) / 2;
             destRect.Width = (int)(frameWidth * scale);
             destRect.Height = (int)(this.frameHeight * scale);
+        }
+
+        public void Going()
+        {
+            position.X += angle.X*speed;
+            position.Y += angle.Y*speed;
         }
         #endregion
 

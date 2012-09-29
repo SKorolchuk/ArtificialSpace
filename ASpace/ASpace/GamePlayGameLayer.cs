@@ -53,11 +53,15 @@ namespace ASpace
 
         private Texture2D mainBackground;
 
+        private List<Missle> rockets = new List<Missle>();
+
         internal string TerminalMsg = string.Empty;
 
         private Sprite simpleSprite;
 
         private SpriteText simpleText;
+
+        private Enemy vortrex;
 
         bool doonce = true;  
 
@@ -140,6 +144,9 @@ namespace ASpace
             simpleText = new SpriteText(Fonts["Simple"], new Vector2(30, 40));
             simpleText.SpriteColor = Color.Red;
             TerminalMsg += "System is under control...\n";
+            vortrex = new Enemy(new Animation(Textures["Hole"], new Vector2(10, 10), 100, 100, 1, 24, Color.White, 1.0f, true), Textures["Hole"], Textures["Hole"]);
+            vortrex.Animation.speed = 1;
+            vortrex.Animation.angle = new Vector2(1, 1);
         }
 
         /// <summary>
@@ -200,14 +207,58 @@ namespace ASpace
                 MediaPlayer.Volume += 0.1f;
             if (PrevState.IsKeyDown(Keys.Down) && CurState.IsKeyUp(Keys.Up) && MediaPlayer.Volume > 0.0f)
                 MediaPlayer.Volume -= 0.1f;
-            if (Math.Sqrt(Math.Pow((simpleSprite.SpriteLocation.X - MouseSt.X - 1), 2) + Math.Pow((simpleSprite.SpriteLocation.X - MouseSt.X - 1), 2)))
+            simpleSprite.SpriteLocation = new Vector2(MouseSt.X, MouseSt.Y);
             SpellUpdate(gameTime);
             PrevState = CurState;
             ship.Update(gameTime);
             UpdateParallax();
             RecalcTerminal();
             CheckMediaPlayerState();
+            CollapseRockets();
+            UpdateRockets(gameTime);
+            UpdateEnemies(gameTime);
+            if (gameTime.TotalGameTime.Milliseconds % 2000 == 0)
+                FireRocket();
             base.Update(gameTime);
+        }
+
+        private void UpdateEnemies(GameTime gameTime)
+        {
+            if (!vortrex.Alive)
+            {
+                vortrex.Alive = true;
+                vortrex.Animation.Position = new Vector2(randomizer.Next(0, GameScreenRect.Width), randomizer.Next(0, GameScreenRect.Height));
+            }
+            vortrex.Update(gameTime);
+            vortrex.Animation.Going();
+            if (!GameScreenRect.Contains((int) vortrex.Animation.Position.X,
+                                         (int) vortrex.Animation.Position.Y))
+            {
+                if (vortrex.Animation.Position.X > GameScreenRect.X)
+                {
+                    vortrex.Animation.angle.X = -1;
+                }
+                else vortrex.Animation.angle.X = 1;
+                if (vortrex.Animation.Position.Y > GameScreenRect.Y)
+                {
+                    vortrex.Animation.angle.Y = -1;
+                }
+                else vortrex.Animation.angle.Y = 1;
+            }
+            foreach (Missle rocket in rockets)
+            {
+                if (vortrex.Animation.destRect.Contains((int)rocket.MissleAnimation.Position.X, 
+                                                        (int)rocket.MissleAnimation.Position.Y))
+                    vortrex.Alive = false;
+            }
+        }
+
+        private void UpdateRockets(GameTime gameTime)
+        {
+            foreach (Missle rocket in rockets)
+            {
+                if (rocket.MissleAnimation != null) rocket.Update(gameTime);
+            }
         }
 
         private void SpellUpdate(GameTime gameTime)
@@ -216,6 +267,7 @@ namespace ASpace
             {
                 Sounds["Blast1"].Play();
                 TerminalMsg += string.Format("{0}You use blaster 1...\n", TerminalMsg);
+                FireRocket();
             }
             if (PrevState.IsKeyDown(Keys.D2) && CurState.IsKeyUp(Keys.D2))
             {
@@ -231,6 +283,47 @@ namespace ASpace
             {
                 Sounds["Blast4"].Play();
                 TerminalMsg += string.Format("{0}You use blaster 4...\n", TerminalMsg);
+            }
+        }
+
+        private void FireRocket()
+        {
+            var basis = new Vector2
+                            {
+                                X = Math.Abs(MouseSt.X - ship.Animation.Position.X),
+                                Y = Math.Abs(MouseSt.Y - ship.Animation.Position.Y)
+                            };
+            basis.Normalize();
+            if (MouseSt.X > ship.Animation.Position.X) basis.X *= 1;
+            else basis.X *= -1;
+            if (MouseSt.Y > ship.Animation.Position.Y) basis.Y *= 1;
+            else basis.Y *= -1;
+            AddRocket(basis);
+        }
+
+        private void AddRocket(Vector2 basis)
+        {
+            Missle newRocket = new Missle();
+            newRocket.Initialize(
+                new Animation(Textures["gradient"], ship.Animation.Position, 64, 64, 1, 25, Color.White, 1.0f, true),
+                100,
+                new Vector2(0, 0), 10,
+                basis);
+            rockets.Add(newRocket);
+        }
+
+        private void CollapseRockets()
+        {
+            foreach (Missle rocket in rockets)
+            {
+                if (!GameScreenRect.Contains((int)rocket.MissleAnimation.Position.X,
+                                            (int)rocket.MissleAnimation.Position.Y))
+                    rocket.Alive = false;
+            }
+            var rocketsToDelete = rockets.Where(rocket => !rocket.Alive).ToList();
+            foreach (Missle missle in rocketsToDelete)
+            {
+                rockets.Remove(missle);
             }
         }
 
@@ -280,13 +373,23 @@ namespace ASpace
             spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.LinearWrap, null, null);
             spriteBatch.Draw(mainBackground, new Vector2(0, 0), new Rectangle((int)(-ShiftOfBack.X), (int)(-ShiftOfBack.Y), mainBackground.Width, mainBackground.Height), Color.White);
             ship.Draw(spriteBatch);
+            DrawRockets();
+            vortrex.Draw(spriteBatch);
             DrawInterface();
+            simpleSprite.DrawSprite(spriteBatch);
             spriteBatch.End();
+        }
+
+        private void DrawRockets()
+        {
+            foreach (Missle rocket in rockets)
+            {
+                if (rocket.MissleAnimation != null) rocket.Draw(spriteBatch);
+            }
         }
 
         private void DrawInterface()
         {
-            spriteBatch.Draw(Textures["BackGroundSparks"], GameScreenRect, Color.White);
             spriteBatch.Draw(Textures["Interface"], GameScreenRect, Color.White);
             spriteBatch.DrawString(Fonts["Simple"], TerminalMsg, new Vector2(90, 50), Color.White);
         }

@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MenuList
 {
-    public class MenuItem : IGame
+    public class MenuItem : IGamable
     {
         public readonly string Id;
         public readonly string Name;

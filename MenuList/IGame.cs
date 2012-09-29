@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace ASpace
 {
-    public interface IGame
+    public interface IGamable
     {
         void Draw(SpriteBatch spriteBatch);
         void Update(GameTime gameTime);
