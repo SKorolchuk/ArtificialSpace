@@ -63,6 +63,10 @@ namespace ASpace
 
         private Enemy vortrex;
 
+        private List<Enemy> vortrexes = new List<Enemy>(); 
+
+        private List<Effect> explosion = new List<Effect>();
+
         bool doonce = true;  
 
         void CheckMediaPlayerState()
@@ -81,7 +85,7 @@ namespace ASpace
         {
             graphics = new GraphicsDeviceManager(this);
             IsMouseVisible = true;
-            graphics.IsFullScreen = true;
+            graphics.IsFullScreen = false;
             graphics.PreferredBackBufferHeight = 768;
             graphics.PreferredBackBufferWidth = 1366;
             GameScreenRect = new Rectangle(0,0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
@@ -113,6 +117,7 @@ namespace ASpace
             Textures.Add("Interface", Content.Load<Texture2D>(@"Tex\Interface"));
             Textures.Add("ParallaxSpace", Content.Load<Texture2D>(@"Tex\ParallaxSpace"));
             Textures.Add("gradient", Content.Load<Texture2D>(@"Tex\spr2"));
+            Textures.Add("Explosion", Content.Load<Texture2D>(@"Tex\explosion"));
             #endregion
             #region Load Music
             Music.Add("DeusEx", Content.Load<Song>(@"Music\Vi_Zav_track"));
@@ -144,9 +149,12 @@ namespace ASpace
             simpleText = new SpriteText(Fonts["Simple"], new Vector2(30, 40));
             simpleText.SpriteColor = Color.Red;
             TerminalMsg += "System is under control...\n";
-            vortrex = new Enemy(new Animation(Textures["Hole"], new Vector2(10, 10), 100, 100, 1, 24, Color.White, 1.0f, true), Textures["Hole"], Textures["Hole"]);
-            vortrex.Animation.speed = 1;
-            vortrex.Animation.angle = new Vector2(1, 1);
+            for(int i = 0; i < 5; i++){
+                vortrex = new Enemy(new Animation(Textures["Hole"], new Vector2(10, 10), 100, 100, 1, 24, Color.White, 1.0f, true), Textures["Hole"], Textures["Hole"]);
+                vortrex.Animation.speed = 1;
+                vortrex.Animation.angle = new Vector2(0, 5);
+                vortrexes.Add(vortrex);
+            }
         }
 
         /// <summary>
@@ -215,8 +223,13 @@ namespace ASpace
             RecalcTerminal();
             CheckMediaPlayerState();
             CollapseRockets();
+            CollapseEffects();
             UpdateRockets(gameTime);
             UpdateEnemies(gameTime);
+            foreach (Effect effect in explosion)
+            {
+                effect.Update(gameTime);
+            }
             if (gameTime.TotalGameTime.Milliseconds % 2000 == 0)
                 FireRocket();
             base.Update(gameTime);
@@ -224,32 +237,40 @@ namespace ASpace
 
         private void UpdateEnemies(GameTime gameTime)
         {
-            if (!vortrex.Alive)
+            foreach (Enemy enemy in vortrexes)
             {
-                vortrex.Alive = true;
-                vortrex.Animation.Position = new Vector2(randomizer.Next(0, GameScreenRect.Width), randomizer.Next(0, GameScreenRect.Height));
-            }
-            vortrex.Update(gameTime);
-            vortrex.Animation.Going();
-            if (!GameScreenRect.Contains((int) vortrex.Animation.Position.X,
-                                         (int) vortrex.Animation.Position.Y))
-            {
-                if (vortrex.Animation.Position.X > GameScreenRect.X)
+                if (!enemy.Alive)
                 {
-                    vortrex.Animation.angle.X = -1;
+                    enemy.Alive = true;
+                    enemy.Animation.Position = new Vector2(randomizer.Next(0, GameScreenRect.Width), 10);
                 }
-                else vortrex.Animation.angle.X = 1;
-                if (vortrex.Animation.Position.Y > GameScreenRect.Y)
+                enemy.Update(gameTime);
+                enemy.Animation.Going();
+                if (!GameScreenRect.Contains((int)enemy.Animation.Position.X,
+                                             (int)enemy.Animation.Position.Y))
                 {
-                    vortrex.Animation.angle.Y = -1;
+                    enemy.Alive = false;
                 }
-                else vortrex.Animation.angle.Y = 1;
             }
             foreach (Missle rocket in rockets)
             {
-                if (vortrex.Animation.destRect.Contains((int)rocket.MissleAnimation.Position.X, 
-                                                        (int)rocket.MissleAnimation.Position.Y))
-                    vortrex.Alive = false;
+                foreach (Enemy enemy in vortrexes)
+                {
+                    if (enemy.Animation.destRect.Contains((int)rocket.MissleAnimation.Position.X,
+                                                            (int) rocket.MissleAnimation.Position.Y))
+                    {
+                        enemy.Alive = false;
+                        var expOfRocket = new Effect();
+                        expOfRocket.Initialize(new Animation(Textures["Explosion"],
+                                                             enemy.Animation.Position,
+                                                             64, 64,
+                                                             10, 50,
+                                                             Color.White, 1.0f, true),
+                                               500,
+                                               Sounds["Blast2"]);
+                        explosion.Add(expOfRocket);
+                    }
+                }
             }
         }
 
@@ -323,7 +344,16 @@ namespace ASpace
             var rocketsToDelete = rockets.Where(rocket => !rocket.Alive).ToList();
             foreach (Missle missle in rocketsToDelete)
             {
-                rockets.Remove(missle);
+               rockets.Remove(missle);
+            }
+        }
+
+        private void CollapseEffects()
+        {
+            var effectsTodel = explosion.Where(exp => !exp.Alive).ToList();
+            foreach (var exp in effectsTodel)
+            {
+                explosion.Remove(exp);
             }
         }
 
@@ -374,7 +404,14 @@ namespace ASpace
             spriteBatch.Draw(mainBackground, new Vector2(0, 0), new Rectangle((int)(-ShiftOfBack.X), (int)(-ShiftOfBack.Y), mainBackground.Width, mainBackground.Height), Color.White);
             ship.Draw(spriteBatch);
             DrawRockets();
-            vortrex.Draw(spriteBatch);
+            foreach (Enemy enemy in vortrexes)
+            {
+                enemy.Draw(spriteBatch);
+            }
+            foreach (Effect effect in explosion)
+            {
+                effect.Draw(spriteBatch);
+            }
             DrawInterface();
             simpleSprite.DrawSprite(spriteBatch);
             spriteBatch.End();

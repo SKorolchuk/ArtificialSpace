@@ -22,26 +22,39 @@ namespace ASpace
     {
         public Animation EffectAnimation;
 
-        public TimeSpan TimeOfLiving;
+        public int TimeOfLiving;
 
         public bool Alive;
 
         public SoundEffect VisualEffectSound;
 
-        public void Initialize()
+        public int SpawnMillisec = 0;
+
+        public void Initialize(Animation anim, int timeOflife, SoundEffect sound)
         {
+            this.EffectAnimation = anim;
+            this.TimeOfLiving = timeOflife;
+            VisualEffectSound = sound;
+            Alive = true;
+            VisualEffectSound.Play();
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
+            if (Alive)
+                EffectAnimation.Draw(spriteBatch);
         }
 
         public void Update(GameTime gameTime)
         {
-        }
-
-        public Effect()
-        {
+            if (SpawnMillisec == 0)
+                SpawnMillisec = gameTime.TotalGameTime.Milliseconds;
+            if ((Math.Abs(gameTime.TotalGameTime.Milliseconds - SpawnMillisec)) >= TimeOfLiving)
+                Alive = false;
+            if (Alive)
+            {
+                EffectAnimation.Update(gameTime);
+            }
         }
     }
 }
