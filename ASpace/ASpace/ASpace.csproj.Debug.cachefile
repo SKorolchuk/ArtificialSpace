@@ -21,6 +21,13 @@ Content\Sounds\Blast2.xnb
 Content\Sounds\Blast3.xnb
 Content\Sounds\Blast4.xnb
 Content\Tex\explosion.xnb
+Content\Tex\enemyShip.xnb
+Content\Tex\stage2.xnb
+Content\Tex\stage3.xnb
+Content\Tex\NEXT_STAGE.xnb
+Content\Tex\impactMissle.xnb
+Content\Tex\laserMissle.xnb
+Content\Sounds\Explosion.xnb
 Content\Music\Ha_Zm_track.wma
 Content\Music\Vi_Zav_track.wma
 Content\Music\Ma_Ef_track.wma

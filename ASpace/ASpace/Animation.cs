@@ -110,7 +110,7 @@ namespace ASpace
 
             sRect = new Rectangle();
             destRect = new Rectangle();
-
+            this.angle = new Vector2(1, 0);
             // Set the Animation to active by default
             this.active = true;
         }
@@ -143,6 +143,8 @@ namespace ASpace
         public void Draw(SpriteBatch spriteBatch)
         {
                 spriteBatch.Draw(spriteStrip, destRect, sRect, color);
+                //spriteBatch.Draw(spriteStrip, new Vector2(destRect.X, destRect.Y), sRect, color,
+                //float)Math.Acos(Math.Abs(angle.X))/MathHelper.Pi*2, new Vector2(0, 0),  1.0f, SpriteEffects.None, 0);
         }
 
         public void Initialize(Texture2D texture, Vector2 position,

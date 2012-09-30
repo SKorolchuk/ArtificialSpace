@@ -67,6 +67,8 @@ namespace ASpace
 
         private List<Effect> explosion = new List<Effect>();
 
+        private int stage = 1;
+
         bool doonce = true;  
 
         void CheckMediaPlayerState()
@@ -118,14 +120,20 @@ namespace ASpace
             Textures.Add("ParallaxSpace", Content.Load<Texture2D>(@"Tex\ParallaxSpace"));
             Textures.Add("gradient", Content.Load<Texture2D>(@"Tex\spr2"));
             Textures.Add("Explosion", Content.Load<Texture2D>(@"Tex\explosion"));
+            Textures.Add("EnemyShip", Content.Load<Texture2D>(@"Tex\enemyShip"));
+            Textures.Add("MainBackGround2", Content.Load<Texture2D>(@"Tex\stage2"));
+            Textures.Add("MainBackGround3", Content.Load<Texture2D>(@"Tex\stage3"));
+            Textures.Add("NextStage", Content.Load<Texture2D>(@"Tex\NEXT_STAGE"));
+            Textures.Add("LaserMissle", Content.Load<Texture2D>(@"Tex\laserMissle"));
+            Textures.Add("ImpactMissle", Content.Load<Texture2D>(@"Tex\impactMissle"));
             #endregion
             #region Load Music
-            Music.Add("DeusEx", Content.Load<Song>(@"Music\Vi_Zav_track"));
-            MusicNames.Add("DeusEx");
+            //Music.Add("DeusEx", Content.Load<Song>(@"Music\Vi_Zav_track"));
+            //MusicNames.Add("DeusEx");
             Music.Add("Crysis", Content.Load<Song>(@"Music\Ha_Zm_track"));
             MusicNames.Add("Crysis");
-            Music.Add("MassEffect", Content.Load<Song>(@"Music\Ma_Ef_track"));
-            MusicNames.Add("MassEffect");
+            //Music.Add("MassEffect", Content.Load<Song>(@"Music\Ma_Ef_track"));
+            //MusicNames.Add("MassEffect");
             #endregion
             #region Load Fonts
             Fonts.Add("Title", Content.Load<SpriteFont>(@"Fonts\TitleFont"));
@@ -136,6 +144,7 @@ namespace ASpace
             Sounds.Add("Blast2", Content.Load<SoundEffect>(@"Sounds\Blast2"));
             Sounds.Add("Blast3", Content.Load<SoundEffect>(@"Sounds\Blast3"));
             Sounds.Add("Blast4", Content.Load<SoundEffect>(@"Sounds\Blast4"));
+            Sounds.Add("Explosion", Content.Load<SoundEffect>(@"Sounds\Explosion"));
             #endregion
             #region Load Effects
             #endregion
@@ -150,7 +159,7 @@ namespace ASpace
             simpleText.SpriteColor = Color.Red;
             TerminalMsg += "System is under control...\n";
             for(int i = 0; i < 5; i++){
-                vortrex = new Enemy(new Animation(Textures["Hole"], new Vector2(10, 10), 100, 100, 1, 24, Color.White, 1.0f, true), Textures["Hole"], Textures["Hole"]);
+                vortrex = new Enemy(new Animation(Textures["EnemyShip"], new Vector2(10, 10), 64, 64, 1, 100, Color.White, 1.0f, true), Textures["Hole"], Textures["Hole"]);
                 vortrex.Animation.speed = 1;
                 vortrex.Animation.angle = new Vector2(0, 5);
                 vortrexes.Add(vortrex);
@@ -226,12 +235,13 @@ namespace ASpace
             CollapseEffects();
             UpdateRockets(gameTime);
             UpdateEnemies(gameTime);
+            UpdateStages(gameTime);
             foreach (Effect effect in explosion)
             {
                 effect.Update(gameTime);
             }
             if (gameTime.TotalGameTime.Milliseconds % 2000 == 0)
-                FireRocket();
+                FireRocket(Textures["LaserMissle"]);
             base.Update(gameTime);
         }
 
@@ -267,7 +277,7 @@ namespace ASpace
                                                              10, 50,
                                                              Color.White, 1.0f, true),
                                                500,
-                                               Sounds["Blast2"]);
+                                               Sounds["Explosion"]);
                         explosion.Add(expOfRocket);
                     }
                 }
@@ -288,12 +298,13 @@ namespace ASpace
             {
                 Sounds["Blast1"].Play();
                 TerminalMsg += string.Format("{0}You use blaster 1...\n", TerminalMsg);
-                FireRocket();
+                FireRocket(Textures["LaserMissle"]);
             }
             if (PrevState.IsKeyDown(Keys.D2) && CurState.IsKeyUp(Keys.D2))
             {
                 Sounds["Blast2"].Play();
                 TerminalMsg += string.Format("{0}You use blaster 2...\n", TerminalMsg);
+                FireRocket(Textures["ImpactMissle"]);
             }
             if (PrevState.IsKeyDown(Keys.D3) && CurState.IsKeyUp(Keys.D3))
             {
@@ -307,7 +318,7 @@ namespace ASpace
             }
         }
 
-        private void FireRocket()
+        private void FireRocket(Texture2D tex)
         {
             var basis = new Vector2
                             {
@@ -319,14 +330,52 @@ namespace ASpace
             else basis.X *= -1;
             if (MouseSt.Y > ship.Animation.Position.Y) basis.Y *= 1;
             else basis.Y *= -1;
-            AddRocket(basis);
+            AddRocket(basis, tex);
         }
 
-        private void AddRocket(Vector2 basis)
+        private void UpdateStages(GameTime time)
+        {
+            if (this.stage == 1)
+            {
+                if (time.TotalGameTime.Seconds >= 20)
+                {
+                    var next = new Effect();
+                    next.Initialize(new Animation(Textures["NextStage"],
+                                                  new Vector2(GameScreenRect.X - 128, GameScreenRect.Y - 32),
+                                                  256, 64,
+                                                  1, 1000,
+                                                  Color.White, 1.0f, true),
+                                    2000,
+                                    null);
+                    explosion.Add(next);
+                    mainBackground = Textures["MainBackGround2"];
+                    stage = 2;
+                }
+            }
+            else if (stage == 2)
+                    {
+                        if (time.TotalGameTime.Seconds >= 40)
+                        {
+                            var next = new Effect();
+                            next.Initialize(new Animation(Textures["NextStage"],
+                                                          new Vector2(GameScreenRect.X - 128, GameScreenRect.Y - 32),
+                                                          256, 64,
+                                                          1, 1000,
+                                                          Color.White, 1.0f, true),
+                                            4000,
+                                            null);
+                            explosion.Add(next);
+                            mainBackground = Textures["MainBackGround3"];
+                            stage = 3;
+                        }
+                    }
+        }
+
+        private void AddRocket(Vector2 basis, Texture2D texture)
         {
             Missle newRocket = new Missle();
             newRocket.Initialize(
-                new Animation(Textures["gradient"], ship.Animation.Position, 64, 64, 1, 25, Color.White, 1.0f, true),
+                new Animation(texture, ship.Animation.Position, texture.Width, texture.Height, 1, 25, Color.White, 1.0f, true),
                 100,
                 new Vector2(0, 0), 10,
                 basis);

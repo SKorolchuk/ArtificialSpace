@@ -36,7 +36,7 @@ namespace ASpace
             this.TimeOfLiving = timeOflife;
             VisualEffectSound = sound;
             Alive = true;
-            VisualEffectSound.Play();
+            if (VisualEffectSound != null) VisualEffectSound.Play();
         }
 
         public void Draw(SpriteBatch spriteBatch)
