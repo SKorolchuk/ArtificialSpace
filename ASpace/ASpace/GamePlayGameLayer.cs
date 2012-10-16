@@ -22,66 +22,7 @@ namespace ASpace
 
         internal Interactivity activities;
 
-        /// <summary>
-        /// Contains space of action screen
-        /// </summary>
-        internal Rectangle GameScreenRect;
-
-        internal KeyboardState CurState;
-
-        internal KeyboardState PrevState;
-
-        internal MouseState MouseSt;
-
-        internal Dictionary<string, Texture2D> Textures = new Dictionary<string, Texture2D>();
-
-        internal Dictionary<string, SpriteFont> Fonts = new Dictionary<string, SpriteFont>();
-
-        internal Dictionary<string, Song> Music = new Dictionary<string, Song>();
-
-        internal List<string> MusicNames = new List<string>();
-
-        internal Dictionary<string, SoundEffect> Sounds = new Dictionary<string, SoundEffect>(); 
-
-        internal Dictionary<string, Texture2D> Effects = new Dictionary<string, Texture2D>(); 
-
-        private Random randomizer = new Random((int)DateTime.Now.Ticks);
-
-        private Player ship;
-
-        private Vector2 ShiftOfBack;
-
-        private Texture2D mainBackground;
-
-        private List<Missle> rockets = new List<Missle>();
-
-        internal string TerminalMsg = string.Empty;
-
-        private Sprite simpleSprite;
-
-        private SpriteText simpleText;
-
-        private Enemy vortrex;
-
-        private List<Enemy> vortrexes = new List<Enemy>(); 
-
-        private List<Effect> explosion = new List<Effect>();
-
-        private int stage = 1;
-
-        bool doonce = true;  
-
-        void CheckMediaPlayerState()
-        {
-            if(MediaPlayer.State != MediaState.Playing) 
-            {  
-                if(doonce) doonce = false;  
-                MediaPlayer.Play(Music[MusicNames[randomizer.Next(0, Music.Count-1)]]);  
-            }  
-            if(MediaPlayer.State == MediaState.Playing)
-                doonce = true;  
-        }
-
+	    internal Resources Resources = new Resources();
 
         public GamePlayGameLayer()
         {
@@ -90,7 +31,9 @@ namespace ASpace
             graphics.IsFullScreen = false;
             graphics.PreferredBackBufferHeight = 768;
             graphics.PreferredBackBufferWidth = 1366;
-            GameScreenRect = new Rectangle(0,0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
+			map = new World(this);
+			activities = new Interactivity(this);
+			map.GameScreenRect = new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
             Content.RootDirectory = "Content";
         }
 
@@ -106,63 +49,83 @@ namespace ASpace
             base.Initialize();
             #region Load Content
             #region Load Textures
-            Textures.Add("MainBackGround", Content.Load<Texture2D>(@"Tex\MainBackGround"));
-            Textures.Add("BackGroundSparks", Content.Load<Texture2D>(@"Tex\BackGroundSparks"));
-            Textures.Add("Asteroid2", Content.Load<Texture2D>(@"Tex\Asteroid2"));
-            Textures.Add("Hole", Content.Load<Texture2D>(@"Tex\Hole"));
-            Textures.Add("PlayerUp", Content.Load<Texture2D>(@"Tex\PlayerUp"));
-            Textures.Add("PlayerLeft", Content.Load<Texture2D>(@"Tex\PlayerLeft"));
-            Textures.Add("PlayerRight", Content.Load<Texture2D>(@"Tex\PlayerRight"));
-            Textures.Add("Red", Content.Load<Texture2D>(@"Tex\Red"));
-            Textures.Add("EarthBackground", Content.Load<Texture2D>(@"Tex\EarthBackground"));
-            Textures.Add("ParallaxBackGround", Content.Load<Texture2D>(@"Tex\ParallaxBackGround"));
-            Textures.Add("Interface", Content.Load<Texture2D>(@"Tex\Interface"));
-            Textures.Add("ParallaxSpace", Content.Load<Texture2D>(@"Tex\ParallaxSpace"));
-            Textures.Add("gradient", Content.Load<Texture2D>(@"Tex\spr2"));
-            Textures.Add("Explosion", Content.Load<Texture2D>(@"Tex\explosion"));
-            Textures.Add("EnemyShip", Content.Load<Texture2D>(@"Tex\enemyShip"));
-            Textures.Add("MainBackGround2", Content.Load<Texture2D>(@"Tex\stage2"));
-            Textures.Add("MainBackGround3", Content.Load<Texture2D>(@"Tex\stage3"));
-            Textures.Add("NextStage", Content.Load<Texture2D>(@"Tex\NEXT_STAGE"));
-            Textures.Add("LaserMissle", Content.Load<Texture2D>(@"Tex\laserMissle"));
-            Textures.Add("ImpactMissle", Content.Load<Texture2D>(@"Tex\impactMissle"));
+			Resources.Textures.Add("MainBackGround", Content.Load<Texture2D>(@"Tex\MainBackGround"));
+			Resources.Textures.Add("BackGroundSparks", Content.Load<Texture2D>(@"Tex\BackGroundSparks"));
+			Resources.Textures.Add("Asteroid2", Content.Load<Texture2D>(@"Tex\Asteroid2"));
+			Resources.Textures.Add("Hole", Content.Load<Texture2D>(@"Tex\Hole"));
+			Resources.Textures.Add("PlayerUp", Content.Load<Texture2D>(@"Tex\PlayerUp"));
+			Resources.Textures.Add("PlayerLeft", Content.Load<Texture2D>(@"Tex\PlayerLeft"));
+			Resources.Textures.Add("PlayerRight", Content.Load<Texture2D>(@"Tex\PlayerRight"));
+			Resources.Textures.Add("Red", Content.Load<Texture2D>(@"Tex\Red"));
+			Resources.Textures.Add("EarthBackground", Content.Load<Texture2D>(@"Tex\EarthBackground"));
+			Resources.Textures.Add("ParallaxBackGround", Content.Load<Texture2D>(@"Tex\ParallaxBackGround"));
+			Resources.Textures.Add("Interface", Content.Load<Texture2D>(@"Tex\Interface"));
+			Resources.Textures.Add("ParallaxSpace", Content.Load<Texture2D>(@"Tex\ParallaxSpace"));
+			Resources.Textures.Add("gradient", Content.Load<Texture2D>(@"Tex\spr2"));
+			Resources.Textures.Add("Explosion", Content.Load<Texture2D>(@"Tex\explosion"));
+			Resources.Textures.Add("EnemyShip", Content.Load<Texture2D>(@"Tex\enemyShip"));
+			Resources.Textures.Add("MainBackGround2", Content.Load<Texture2D>(@"Tex\stage2"));
+			Resources.Textures.Add("MainBackGround3", Content.Load<Texture2D>(@"Tex\stage3"));
+			Resources.Textures.Add("NextStage", Content.Load<Texture2D>(@"Tex\NEXT_STAGE"));
+			Resources.Textures.Add("LaserMissle", Content.Load<Texture2D>(@"Tex\laserMissle"));
+			Resources.Textures.Add("ImpactMissle", Content.Load<Texture2D>(@"Tex\impactMissle"));
             #endregion
             #region Load Music
-            //Music.Add("DeusEx", Content.Load<Song>(@"Music\Vi_Zav_track"));
-            //MusicNames.Add("DeusEx");
-            Music.Add("Crysis", Content.Load<Song>(@"Music\Ha_Zm_track"));
-            MusicNames.Add("Crysis");
-            //Music.Add("MassEffect", Content.Load<Song>(@"Music\Ma_Ef_track"));
-            //MusicNames.Add("MassEffect");
+			//Resources.Music.Add("DeusEx", Content.Load<Song>(@"Music\Vi_Zav_track"));
+			//Resources.MusicNames.Add("DeusEx");
+			Resources.Music.Add("Crysis", Content.Load<Song>(@"Music\Ha_Zm_track"));
+			Resources.MusicNames.Add("Crysis");
+			//Resources.Music.Add("MassEffect", Content.Load<Song>(@"Music\Ma_Ef_track"));
+			//Resources.MusicNames.Add("MassEffect");
             #endregion
             #region Load Fonts
-            Fonts.Add("Title", Content.Load<SpriteFont>(@"Fonts\TitleFont"));
-            Fonts.Add("Simple", Content.Load<SpriteFont>(@"Fonts\MenuItemFont"));
+			Resources.Fonts.Add("Title", Content.Load<SpriteFont>(@"Fonts\TitleFont"));
+			Resources.Fonts.Add("Simple", Content.Load<SpriteFont>(@"Fonts\MenuItemFont"));
             #endregion
             #region Load Sound Effects
-            Sounds.Add("Blast1", Content.Load<SoundEffect>(@"Sounds\Blast1"));
-            Sounds.Add("Blast2", Content.Load<SoundEffect>(@"Sounds\Blast2"));
-            Sounds.Add("Blast3", Content.Load<SoundEffect>(@"Sounds\Blast3"));
-            Sounds.Add("Blast4", Content.Load<SoundEffect>(@"Sounds\Blast4"));
-            Sounds.Add("Explosion", Content.Load<SoundEffect>(@"Sounds\Explosion"));
+			Resources.Sounds.Add("Blast1", Content.Load<SoundEffect>(@"Sounds\Blast1"));
+			Resources.Sounds.Add("Blast2", Content.Load<SoundEffect>(@"Sounds\Blast2"));
+			Resources.Sounds.Add("Blast3", Content.Load<SoundEffect>(@"Sounds\Blast3"));
+			Resources.Sounds.Add("Blast4", Content.Load<SoundEffect>(@"Sounds\Blast4"));
+			Resources.Sounds.Add("Explosion", Content.Load<SoundEffect>(@"Sounds\Explosion"));
             #endregion
             #region Load Effects
             #endregion
             #endregion
-            ship = new Player(new Animation(Textures["PlayerUp"], new Vector2(graphics.PreferredBackBufferWidth / 2, graphics.PreferredBackBufferHeight/2), 80, 200, 1, 24, Color.White, 1.0f, true), Textures["PlayerLeft"], Textures["PlayerRight"]);
-            ShiftOfBack = new Vector2(0, 0);
-            mainBackground = Textures["ParallaxSpace"];
+			activities.ship = new Player(new Animation(Resources.Textures["PlayerUp"],
+														 new Vector2(graphics.PreferredBackBufferWidth / 2,
+																	 graphics.PreferredBackBufferHeight / 2),
+														 80,
+														 200,
+														 1,
+														 24,
+														 Color.White,
+														 1.0f,
+														 true),
+										Resources.Textures["PlayerLeft"],
+										Resources.Textures["PlayerRight"]);
+			map.ShiftOfBack = new Vector2(0, 0);
+			map.mainBackground = Resources.Textures["ParallaxSpace"];
 
-            simpleSprite = new Sprite(Textures["gradient"]);
-            simpleSprite.OriginToCenter();
-            simpleText = new SpriteText(Fonts["Simple"], new Vector2(30, 40));
-            simpleText.SpriteColor = Color.Red;
-            TerminalMsg += "System is under control...\n";
+			map.simpleSprite = new Sprite(Resources.Textures["gradient"]);
+			map.simpleSprite.OriginToCenter();
+			map.simpleText = new SpriteText(Resources.Fonts["Simple"], new Vector2(30, 40)) { SpriteColor = Color.Red };
+	        map.TerminalMsg += "System is under control...\n";
             for(int i = 0; i < 5; i++){
-                vortrex = new Enemy(new Animation(Textures["EnemyShip"], new Vector2(10, 10), 64, 64, 1, 100, Color.White, 1.0f, true), Textures["Hole"], Textures["Hole"]);
-                vortrex.Animation.speed = 1;
-                vortrex.Animation.angle = new Vector2(0, 5);
-                vortrexes.Add(vortrex);
+				activities.vortrex = new Enemy(new Animation(Resources.Textures["EnemyShip"],
+															new Vector2(10, 10),
+															64,
+															64,
+															1,
+															100,
+															Color.White,
+															1.0f,
+															true),
+												Resources.Textures["Hole"],
+												Resources.Textures["Hole"]);
+				activities.vortrex.Animation.speed = 1;
+				activities.vortrex.Animation.angle = new Vector2(0, 5);
+				activities.vortrexes.Add(activities.vortrex);
             }
         }
 
@@ -193,251 +156,9 @@ namespace ASpace
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            CurState = Keyboard.GetState();
-            MouseSt = Mouse.GetState();
-            // Allows the game to exit
-            if (PrevState.IsKeyDown(Keys.Q))
-                this.Exit();
-            if (PrevState.IsKeyDown(Keys.W))
-            {
-                ship.Move(10, Animation.Way.Up, GameScreenRect);
-                ShiftOfBack.Y += 4;
-            }
-            else if (PrevState.IsKeyDown(Keys.S))
-            {
-                ship.Move(6, Animation.Way.Down, GameScreenRect);
-                ShiftOfBack.Y -= 2;
-            }
-            else if (PrevState.IsKeyDown(Keys.A))
-            {
-                ship.Move(4, Animation.Way.Left, GameScreenRect);
-            }
-            else if (PrevState.IsKeyDown(Keys.D))
-            {
-                ship.Move(4, Animation.Way.Right, GameScreenRect);
-            }
-            else
-            {
-                ship.Move(0, Animation.Way.Up, GameScreenRect);
-            }
-            if (PrevState.IsKeyDown(Keys.Up) && CurState.IsKeyUp(Keys.Up) && MediaPlayer.Volume < 1.0f)
-                MediaPlayer.Volume += 0.1f;
-            if (PrevState.IsKeyDown(Keys.Down) && CurState.IsKeyUp(Keys.Up) && MediaPlayer.Volume > 0.0f)
-                MediaPlayer.Volume -= 0.1f;
-            simpleSprite.SpriteLocation = new Vector2(MouseSt.X, MouseSt.Y);
-            SpellUpdate(gameTime);
-            PrevState = CurState;
-            ship.Update(gameTime);
-            UpdateParallax();
-            RecalcTerminal();
-            CheckMediaPlayerState();
-            CollapseRockets();
-            CollapseEffects();
-            UpdateRockets(gameTime);
-            UpdateEnemies(gameTime);
-            UpdateStages(gameTime);
-            foreach (Effect effect in explosion)
-            {
-                effect.Update(gameTime);
-            }
-            if (gameTime.TotalGameTime.Milliseconds % 2000 == 0)
-                FireRocket(Textures["LaserMissle"]);
+			activities.Update(gameTime);
+			map.Update(gameTime);
             base.Update(gameTime);
-        }
-
-        private void UpdateEnemies(GameTime gameTime)
-        {
-            foreach (Enemy enemy in vortrexes)
-            {
-                if (!enemy.Alive)
-                {
-                    enemy.Alive = true;
-                    enemy.Animation.Position = new Vector2(randomizer.Next(0, GameScreenRect.Width), 10);
-                }
-                enemy.Update(gameTime);
-                enemy.Animation.Going();
-                if (!GameScreenRect.Contains((int)enemy.Animation.Position.X,
-                                             (int)enemy.Animation.Position.Y))
-                {
-                    enemy.Alive = false;
-                }
-            }
-            foreach (Missle rocket in rockets)
-            {
-                foreach (Enemy enemy in vortrexes)
-                {
-                    if (enemy.Animation.destRect.Contains((int)rocket.MissleAnimation.Position.X,
-                                                            (int) rocket.MissleAnimation.Position.Y))
-                    {
-                        enemy.Alive = false;
-                        var expOfRocket = new Effect();
-                        expOfRocket.Initialize(new Animation(Textures["Explosion"],
-                                                             enemy.Animation.Position,
-                                                             64, 64,
-                                                             10, 50,
-                                                             Color.White, 1.0f, true),
-                                               500,
-                                               Sounds["Explosion"]);
-                        explosion.Add(expOfRocket);
-                    }
-                }
-            }
-        }
-
-        private void UpdateRockets(GameTime gameTime)
-        {
-            foreach (Missle rocket in rockets)
-            {
-                if (rocket.MissleAnimation != null) rocket.Update(gameTime);
-            }
-        }
-
-        private void SpellUpdate(GameTime gameTime)
-        {
-            if (PrevState.IsKeyDown(Keys.D1) && CurState.IsKeyUp(Keys.D1))
-            {
-                Sounds["Blast1"].Play();
-                TerminalMsg += string.Format("{0}You use blaster 1...\n", TerminalMsg);
-                FireRocket(Textures["LaserMissle"]);
-            }
-            if (PrevState.IsKeyDown(Keys.D2) && CurState.IsKeyUp(Keys.D2))
-            {
-                Sounds["Blast2"].Play();
-                TerminalMsg += string.Format("{0}You use blaster 2...\n", TerminalMsg);
-                FireRocket(Textures["ImpactMissle"]);
-            }
-            if (PrevState.IsKeyDown(Keys.D3) && CurState.IsKeyUp(Keys.D3))
-            {
-                Sounds["Blast3"].Play();
-                TerminalMsg += string.Format("{0}You use blaster 3...\n", TerminalMsg);
-            }
-            if (PrevState.IsKeyDown(Keys.D4) && CurState.IsKeyUp(Keys.D4))
-            {
-                Sounds["Blast4"].Play();
-                TerminalMsg += string.Format("{0}You use blaster 4...\n", TerminalMsg);
-            }
-        }
-
-        private void FireRocket(Texture2D tex)
-        {
-            var basis = new Vector2
-                            {
-                                X = Math.Abs(MouseSt.X - ship.Animation.Position.X),
-                                Y = Math.Abs(MouseSt.Y - ship.Animation.Position.Y)
-                            };
-            basis.Normalize();
-            if (MouseSt.X > ship.Animation.Position.X) basis.X *= 1;
-            else basis.X *= -1;
-            if (MouseSt.Y > ship.Animation.Position.Y) basis.Y *= 1;
-            else basis.Y *= -1;
-            AddRocket(basis, tex);
-        }
-
-        private void UpdateStages(GameTime time)
-        {
-            if (this.stage == 1)
-            {
-                if (time.TotalGameTime.Seconds >= 20)
-                {
-                    var next = new Effect();
-                    next.Initialize(new Animation(Textures["NextStage"],
-                                                  new Vector2(GameScreenRect.X - 128, GameScreenRect.Y - 32),
-                                                  256, 64,
-                                                  1, 1000,
-                                                  Color.White, 1.0f, true),
-                                    2000,
-                                    null);
-                    explosion.Add(next);
-                    mainBackground = Textures["MainBackGround2"];
-                    stage = 2;
-                }
-            }
-            else if (stage == 2)
-                    {
-                        if (time.TotalGameTime.Seconds >= 40)
-                        {
-                            var next = new Effect();
-                            next.Initialize(new Animation(Textures["NextStage"],
-                                                          new Vector2(GameScreenRect.X - 128, GameScreenRect.Y - 32),
-                                                          256, 64,
-                                                          1, 1000,
-                                                          Color.White, 1.0f, true),
-                                            4000,
-                                            null);
-                            explosion.Add(next);
-                            mainBackground = Textures["MainBackGround3"];
-                            stage = 3;
-                        }
-                    }
-        }
-
-        private void AddRocket(Vector2 basis, Texture2D texture)
-        {
-            Missle newRocket = new Missle();
-            newRocket.Initialize(
-                new Animation(texture, ship.Animation.Position, texture.Width, texture.Height, 1, 25, Color.White, 1.0f, true),
-                100,
-                new Vector2(0, 0), 10,
-                basis);
-            rockets.Add(newRocket);
-        }
-
-        private void CollapseRockets()
-        {
-            foreach (Missle rocket in rockets)
-            {
-                if (!GameScreenRect.Contains((int)rocket.MissleAnimation.Position.X,
-                                            (int)rocket.MissleAnimation.Position.Y))
-                    rocket.Alive = false;
-            }
-            var rocketsToDelete = rockets.Where(rocket => !rocket.Alive).ToList();
-            foreach (Missle missle in rocketsToDelete)
-            {
-               rockets.Remove(missle);
-            }
-        }
-
-        private void CollapseEffects()
-        {
-            var effectsTodel = explosion.Where(exp => !exp.Alive).ToList();
-            foreach (var exp in effectsTodel)
-            {
-                explosion.Remove(exp);
-            }
-        }
-
-        private void UpdateParallax()
-        {
-            if (ShiftOfBack.X < 0)
-            {
-                ShiftOfBack.X += mainBackground.Width;
-            }
-            else if (ShiftOfBack.X >= mainBackground.Width)
-            {
-                ShiftOfBack.X -= mainBackground.Width;
-            }
-            if (ShiftOfBack.Y < 0)
-            {
-                ShiftOfBack.Y += mainBackground.Height;
-            }
-            else if (ShiftOfBack.Y >= mainBackground.Height)
-            {
-                ShiftOfBack.Y -= mainBackground.Height;
-            }
-            ShiftOfBack.Y += 10;
-        }
-
-        void RecalcTerminal()
-        {
-            string[] terminalColocations = TerminalMsg.Split('\n');
-            TerminalMsg = string.Empty;
-            for (int i = ((terminalColocations.Length-5) > 0) ? terminalColocations.Length-5 : 0; i < terminalColocations.Length; i++)
-            {
-                if (terminalColocations[i].Length > 1)
-                {
-                    TerminalMsg += string.Format("{0}\n", terminalColocations[i]);
-                }
-            }
         }
 
         /// <summary>
@@ -450,34 +171,19 @@ namespace ASpace
             // TODO: Add your drawing code here
             base.Draw(gameTime);
             spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.LinearWrap, null, null);
-            spriteBatch.Draw(mainBackground, new Vector2(0, 0), new Rectangle((int)(-ShiftOfBack.X), (int)(-ShiftOfBack.Y), mainBackground.Width, mainBackground.Height), Color.White);
-            ship.Draw(spriteBatch);
-            DrawRockets();
-            foreach (Enemy enemy in vortrexes)
-            {
-                enemy.Draw(spriteBatch);
-            }
-            foreach (Effect effect in explosion)
-            {
-                effect.Draw(spriteBatch);
-            }
+            map.Draw(spriteBatch);
+			activities.Draw(spriteBatch);
             DrawInterface();
-            simpleSprite.DrawSprite(spriteBatch);
+            map.simpleSprite.DrawSprite(spriteBatch);
             spriteBatch.End();
         }
 
-        private void DrawRockets()
-        {
-            foreach (Missle rocket in rockets)
-            {
-                if (rocket.MissleAnimation != null) rocket.Draw(spriteBatch);
-            }
-        }
+        
 
         private void DrawInterface()
         {
-            spriteBatch.Draw(Textures["Interface"], GameScreenRect, Color.White);
-            spriteBatch.DrawString(Fonts["Simple"], TerminalMsg, new Vector2(90, 50), Color.White);
+			spriteBatch.Draw(Resources.Textures["Interface"], map.GameScreenRect, Color.White);
+			spriteBatch.DrawString(Resources.Fonts["Simple"], map.TerminalMsg, new Vector2(90, 50), Color.White);
         }
     }
 }
