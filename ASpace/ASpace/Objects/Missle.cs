@@ -14,8 +14,6 @@ namespace ASpace
     {
         public bool Alive;
 
-        public int Angle;
-
         public int RemoveValue;
 
         public int Speed;

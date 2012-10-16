@@ -26,9 +26,9 @@ namespace ASpace
 
 		internal List<Missle> rockets = new List<Missle>();
 
-		internal Enemy vortrex;
+		internal Enemy enemy;
 
-		internal List<Enemy> vortrexes = new List<Enemy>();
+		internal List<Enemy> enemies = new List<Enemy>();
 
 		internal List<Effect> explosion = new List<Effect>();
 
@@ -45,7 +45,7 @@ namespace ASpace
         {
 			ship.Draw(spriteBatch);
 			DrawRockets(spriteBatch);
-			foreach (Enemy enemy in vortrexes)
+			foreach (Enemy enemy in enemies)
 			{
 				enemy.Draw(spriteBatch);
 			}
@@ -127,7 +127,7 @@ namespace ASpace
 
 		private void UpdateEnemies(GameTime gameTime)
 		{
-			foreach (Enemy enemy in vortrexes)
+			foreach (Enemy enemy in enemies)
 			{
 				if (!enemy.Alive)
 				{
@@ -144,7 +144,7 @@ namespace ASpace
 			}
 			foreach (Missle rocket in rockets)
 			{
-				foreach (Enemy enemy in vortrexes)
+				foreach (Enemy enemy in enemies)
 				{
 					if (enemy.Animation.destRect.Contains((int)rocket.MissleAnimation.Position.X,
 															(int)rocket.MissleAnimation.Position.Y))

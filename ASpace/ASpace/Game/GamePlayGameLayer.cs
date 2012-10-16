@@ -112,7 +112,7 @@ namespace ASpace
 			map.simpleText = new SpriteText(Resources.Fonts["Simple"], new Vector2(30, 40)) { SpriteColor = Color.Red };
 	        map.TerminalMsg += "System is under control...\n";
             for(int i = 0; i < 5; i++){
-				activities.vortrex = new Enemy(new Animation(Resources.Textures["EnemyShip"],
+				activities.enemy = new Enemy(new Animation(Resources.Textures["EnemyShip"],
 															new Vector2(10, 10),
 															64,
 															64,
@@ -122,10 +122,11 @@ namespace ASpace
 															1.0f,
 															true),
 												Resources.Textures["Hole"],
-												Resources.Textures["Hole"]);
-				activities.vortrex.Animation.speed = 1;
-				activities.vortrex.Animation.angle = new Vector2(0, 5);
-				activities.vortrexes.Add(activities.vortrex);
+												Resources.Textures["Hole"],
+												new Vector2(1, 1));
+				activities.enemy.Animation.speed = 1;
+				activities.enemy.Animation.angle = new Vector2(0, 5);
+				activities.enemies.Add(activities.enemy);
             }
         }
 
