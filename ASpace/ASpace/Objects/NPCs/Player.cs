@@ -22,8 +22,9 @@ namespace ASpace
         public Player(Animation animation, Texture2D leftTexture, Texture2D rightTexture)
         {
             this.Initialize(animation, leftTexture, rightTexture);
-            
         }
+
+		public Player(){}
 
         // Initialize the player
         public void Initialize(Animation animation, Texture2D leftTexture, Texture2D rightTexture)

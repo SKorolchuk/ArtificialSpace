@@ -15,14 +15,14 @@ namespace ASpace
 {
     public class GamePlayGameLayer : Microsoft.Xna.Framework.Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
+        protected GraphicsDeviceManager graphics;
+        protected SpriteBatch spriteBatch;
 
         internal World map;
 
         internal Interactivity activities;
 
-	    internal Resources Resources = new Resources();
+	    internal Resources Resources { get; set; }
 
         public GamePlayGameLayer()
         {
@@ -35,6 +35,7 @@ namespace ASpace
 			activities = new Interactivity(this);
 			map.GameScreenRect = new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
             Content.RootDirectory = "Content";
+			Resources = new Resources();
         }
 
         /// <summary>
@@ -93,8 +94,7 @@ namespace ASpace
             #endregion
             #endregion
 			activities.ship = new Player(new Animation(Resources.Textures["PlayerUp"],
-														 new Vector2(graphics.PreferredBackBufferWidth / 2,
-																	 graphics.PreferredBackBufferHeight / 2),
+														 new Vector2(graphics.PreferredBackBufferWidth / 2, graphics.PreferredBackBufferHeight / 2),
 														 80,
 														 200,
 														 1,
@@ -121,12 +121,8 @@ namespace ASpace
 															Color.White,
 															1.0f,
 															true),
-												Resources.Textures["Hole"],
-												Resources.Textures["Hole"],
-												new Vector2(1, 1));
-				activities.enemy.Animation.speed = 1;
-				activities.enemy.Animation.angle = new Vector2(0, 5);
-				activities.enemies.Add(activities.enemy);
+												new Vector2(1, 1)) { Animation = { speed = 1, angle = new Vector2(0, 5) } };
+	            activities.enemies.Add(activities.enemy);
             }
         }
 
@@ -138,7 +134,6 @@ namespace ASpace
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            // TODO: use this.Content to load your game content here
         }
 
         /// <summary>
@@ -168,8 +163,6 @@ namespace ASpace
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-            // TODO: Add your drawing code here
             base.Draw(gameTime);
             spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.LinearWrap, null, null);
             map.Draw(spriteBatch);
