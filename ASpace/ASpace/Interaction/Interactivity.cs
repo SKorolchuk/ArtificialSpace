@@ -217,7 +217,7 @@ namespace ASpace
 		{
 			if (this.stage == 1)
 			{
-				if (time.TotalGameTime.Seconds >= 20)
+				if ((time.TotalGameTime - gameObj.gameStarted.TotalGameTime).Seconds >= 20)
 				{
 					var next = new Effect();
 					next.Initialize(new Animation(gameObj.Resources.Textures["NextStage"],
@@ -234,7 +234,7 @@ namespace ASpace
 			}
 			else if (stage == 2)
 			{
-				if (time.TotalGameTime.Seconds >= 40)
+                if ((time.TotalGameTime - gameObj.gameStarted.TotalGameTime).Seconds >= 40)
 				{
 					var next = new Effect();
 					next.Initialize(new Animation(gameObj.Resources.Textures["NextStage"],

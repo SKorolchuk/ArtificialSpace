@@ -24,6 +24,11 @@ namespace ASpace
 
 	    internal Resources Resources { get; set; }
 
+
+        public bool GameStarted = false;
+
+        public GameTime gameStarted;
+
         public GamePlayGameLayer()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -70,6 +75,7 @@ namespace ASpace
 			Resources.Textures.Add("NextStage", Content.Load<Texture2D>(@"Tex\NEXT_STAGE"));
 			Resources.Textures.Add("LaserMissle", Content.Load<Texture2D>(@"Tex\laserMissle"));
 			Resources.Textures.Add("ImpactMissle", Content.Load<Texture2D>(@"Tex\impactMissle"));
+            Resources.Textures.Add("Loading", Content.Load<Texture2D>(@"Tex\loading"));
             #endregion
             #region Load Music
 			//Resources.Music.Add("DeusEx", Content.Load<Song>(@"Music\Vi_Zav_track"));

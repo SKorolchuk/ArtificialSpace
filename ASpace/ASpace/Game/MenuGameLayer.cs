@@ -18,8 +18,7 @@ namespace ASpace
 
 		private KeyboardState currentKeyState;
 		private KeyboardState prevKeyState;
-
-		public bool GameStarted = false;
+	    private Animation Loading;
 
 		public MenuGameLayer() : base()
         {
@@ -34,6 +33,7 @@ namespace ASpace
         protected override void Initialize()
         {
             base.Initialize();
+            Loading = new Animation(Resources.Textures["Loading"], new Vector2(map.GameScreenRect.Width/2f - 200f, map.GameScreenRect.Height/2f - 20f), 100, 100, 7, 40, Color.White, 1.0f, true);
         }
 
         /// <summary>
@@ -61,7 +61,19 @@ namespace ASpace
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            base.Update(gameTime);
+            currentKeyState = Keyboard.GetState();
+            currentMouseState = Mouse.GetState();
+            if (GameStarted) base.Update(gameTime);
+            if (prevKeyState.IsKeyDown(Keys.Escape) && currentKeyState.IsKeyUp(Keys.Escape))
+                this.Exit();
+            if (prevKeyState.IsKeyDown(Keys.Enter) && currentKeyState.IsKeyUp(Keys.Enter) && !GameStarted)
+            {
+                GameStarted = true;
+                gameStarted = gameTime;
+            }
+            prevKeyState = currentKeyState;
+            prevMouseState = currentMouseState;
+            Loading.Update(gameTime);
         }
 
         /// <summary>
@@ -70,13 +82,14 @@ namespace ASpace
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
             if (GameStarted) base.Draw(gameTime);
             else
             {
 	            spriteBatch.Begin();
-				spriteBatch.DrawString(Resources.Fonts["Title"], "Press Enter!", new Vector2(map.GameScreenRect.Width/2f -100f, map.GameScreenRect.Height/2f-20f), Color.White);
-				spriteBatch.End();
+				spriteBatch.DrawString(Resources.Fonts["Title"], "Press Enter!", new Vector2(map.GameScreenRect.Width/2f -100f, map.GameScreenRect.Height/2f-20f), Color.Wheat);
+				Loading.Draw(spriteBatch);
+                spriteBatch.End();
             }
         }
     }
