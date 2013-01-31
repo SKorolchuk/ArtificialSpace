@@ -1,0 +1,18 @@
+﻿<Menu type="Menu" name="MainMenu" title="Sample Main Menu" version="1.0" position="10,10" >
+	<Item type="MenuLetter" name="Play" description="Start to Play Game!" behavior="NEXT" position="30,10" >
+		<Item type="MenuLetter" name="EasyMode" description="Casual Playing!" behavior="PLAY_EASY" position="" />
+		<Item type="MenuLetter" name="NormalMode" description="Interesting Adventure!" behavior="PLAY_NORMAL" position="" />
+		<Item type="MenuLetter" name="HardMode" description="Only for insane players!" behavior="PLAY_HARD" position="" />
+	</Item>
+	<Item type="MenuLetter" name="Leveling" description="Select Level" behavior="NEXT" position="">
+		<Item type="MenuLetter" name="FirstStage" description="Launch First Stage!" behavior="START_FIRST" position="" />
+		<Item type="MenuLetter" name="SecondStage" description="Launch First Stage!" behavior="START_FIRST" position="" />
+		<Item type="MenuLetter" name="ThirdStage" description="Launch First Stage!" behavior="START_FIRST" position="" />
+	</Item>
+	<Item type="MenuLetter" name="Options" description="" behavior="NEXT" position="" >
+		<Item type="MenuLetter" name="EasyMode" description="Casual Playing!" behavior="" position="" />
+		<Item type="MenuLetter" name="NormalMode" description="Interesting Adventure!" behavior="" position="" />
+		<Item type="MenuLetter" name="HardMode" description="Only for insane players!" behavior="" position="" />
+	</Item>
+	<Item type="MenuLetter" name="Exit" description="Close Game" behavior="EXIT" />
+</Menu>

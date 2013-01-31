@@ -3,13 +3,16 @@ bin-debug/
 bin-release/
 ASpace/ASpace/obj/
 ASpace/ASpaceContent/obj/
+ASpace/ASpace/bin/
+ASpace/ASpaceContent/bin/
 Menu/Menu/obj/
+Menu/Menu/bin/
 MenuList/MenuList/obj/
 MenuList/MenuListContent/obj/
+MenuList/MenuList/bin/
+MenuList/MenuListContent/bin/
 _ReSharper.ArtificialSpace/
+bin/
+obj/
 
 # Project property files
-.actionScriptProperties
-.flexProperties
-.settings/
-.project
