@@ -24,6 +24,7 @@ namespace MenuRepresentation.DOMAIN.MenuDOM.Model
 		public Menu(XDocument doc)
 			: base(doc.Root)
 		{
+			this.LoadItem(doc.Root);
 			CurrentMenuLevel = this;
 		}
 
@@ -37,7 +38,7 @@ namespace MenuRepresentation.DOMAIN.MenuDOM.Model
 
 		public IMenuable CurrentMenuLevel { get; set; }
 
-		public override void LoadItem(XElement ItemNode)
+		public virtual void LoadItem(XElement ItemNode)
 		{
 			base.LoadItem(ItemNode);
 			title = ItemNode.Attribute("title").Value ?? "";

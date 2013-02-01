@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="MenuRepresentation.GAMEMENU.GameMenu" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="8.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAgAIAAAAAIIAAAAAQAAARBAAAAACAAA=</HashCode>
+      <FileName>Concrete\GameMenuAPI\GameMenu.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MenuRepresentation.GAMEMENU.GameMenuItem" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="6" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAgAYAAAAAIIAAAAQAAAARAAAAAACAAA=</HashCode>
+      <FileName>Concrete\GameMenuAPI\GameMenuItem.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="MenuRepresentation.GAMEMENU.Concrete.KeyStateCollection" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="10.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAIAAAAAAAAAAAAACAAAAAAARAACAAAAAAAAAA=</HashCode>
+      <FileName>Concrete\KeyStateCollection.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="MenuRepresentation.DOMAIN.MenuDOM.Abstract.Item" Collapsed="true">
+    <Position X="7.25" Y="1" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="MenuRepresentation.DOMAIN.MenuDOM.Internal.Commander" Collapsed="true">
+    <Position X="10.75" Y="1" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="MenuRepresentation.DOMAIN.MenuDOM.Internal.InternalEnumHelper" Collapsed="true">
+    <Position X="12.5" Y="1" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="MenuRepresentation.DOMAIN.MenuDOM.Model.Menu" Collapsed="true">
+    <Position X="8.25" Y="2.25" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="MenuRepresentation.DOMAIN.MenuDOM.Model.MenuItem" Collapsed="true">
+    <Position X="6" Y="2.25" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="MenuRepresentation.DOMAIN.MenuDOM.Model.Vector" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="12.5" Y="2" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Interface Name="MenuRepresentation.GAMEMENU.IGame" Collapsed="true">
+    <Position X="10.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Abstract\IGame.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="MenuRepresentation.GAMEMENU.IKeyStateCollection" Collapsed="true">
+    <Position X="12.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAIAAAAAAAAAAAAACAAAAAAARAACAAAAAAAAAA=</HashCode>
+      <FileName>Abstract\IKeyStateCollection.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="MenuRepresentation.DOMAIN.MenuDOM.Abstract.IMenu" Collapsed="true">
+    <Position X="6" Y="6.25" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="MenuRepresentation.DOMAIN.MenuDOM.Abstract.IMenuable" Collapsed="true">
+    <Position X="7.25" Y="5" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="MenuRepresentation.DOMAIN.MenuDOM.Abstract.IMenuItem" Collapsed="true">
+    <Position X="8.25" Y="6.25" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="MenuRepresentation.DOMAIN.MenuDOM.Abstract.IVector" Collapsed="true">
+    <Position X="10.75" Y="4" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Enum Name="MenuRepresentation.DOMAIN.MenuDOM.Internal.BehaviorType" Collapsed="true">
+    <Position X="10.75" Y="5" Width="1.5" />
+    <TypeIdentifier />
+  </Enum>
+  <Enum Name="MenuRepresentation.DOMAIN.MenuDOM.Internal.ItemType" Collapsed="true">
+    <Position X="12.5" Y="5" Width="1.5" />
+    <TypeIdentifier />
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

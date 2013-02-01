@@ -79,9 +79,7 @@ namespace MenuRepresentation.DOMAIN.MenuDOM.Abstract
 		public Item(XElement ItemNode)
 		{
 			this.nestedItems = new List<IMenuable>();
-			this.LoadItem(ItemNode);
 			typeOfTheItem = (new ItemType()).GetItemType(ItemNode.Attribute("type").Value ?? "");
-			
 			name = ItemNode.Attribute("name").Value ?? "";
 			position = new Vector(ItemNode.Attribute("position").Value ?? "");
 		}

@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{782BE7A6-EAAA-45E7-A4A0-7ABAB567BE78}</ProjectGuid>
+    <ProjectGuid>{56B0611B-CB8C-457B-A986-6457E0420615}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MenuRepresentation.DOMAIN</RootNamespace>
-    <AssemblyName>MenuRepresentation.DOMAIN</AssemblyName>
+    <RootNamespace>MenuRepresentation.GAMEMENU</RootNamespace>
+    <AssemblyName>MenuRepresentation.GAMEMENU</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -31,6 +31,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
+    <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
+    <Reference Include="Microsoft.Xna.Framework.GamerServices, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
+    <Reference Include="Microsoft.Xna.Framework.Input.Touch, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Xna.Framework.Net, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Xna.Framework.Storage, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Xna.Framework.Video, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Xna.Framework.Xact, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -40,25 +49,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MenuDOM\Abstract\BaseMenuAPI\IMenu.cs" />
-    <Compile Include="MenuDOM\Abstract\BaseMenuAPI\IMenuable.cs" />
-    <Compile Include="MenuDOM\Abstract\BaseMenuAPI\IMenuItem.cs" />
-    <Compile Include="MenuDOM\Abstract\BaseMenuAPI\Item.cs" />
-    <Compile Include="MenuDOM\Abstract\IVector.cs" />
-    <Compile Include="MenuDOM\Internal\BehaviorType.cs" />
-    <Compile Include="MenuDOM\Internal\Commander.cs" />
-    <Compile Include="MenuDOM\Internal\InternalEnumHelper.cs" />
-    <Compile Include="MenuDOM\Internal\ItemType.cs" />
-    <Compile Include="MenuDOM\Model\Menu.cs" />
-    <Compile Include="MenuDOM\Model\MenuItem.cs" />
-    <Compile Include="MenuDOM\Model\Vector.cs" />
+    <Compile Include="Concrete\GameMenuAPI\GameMenu.cs" />
+    <Compile Include="Concrete\GameMenuAPI\GameMenuItem.cs" />
+    <Compile Include="Abstract\IGame.cs" />
+    <Compile Include="Abstract\IKeyStateCollection.cs" />
+    <Compile Include="Concrete\KeyStateCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="MenuDeclarative\Menu.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <ProjectReference Include="..\MenuRepresentation.DOMAIN\MenuRepresentation.DOMAIN.csproj">
+      <Project>{782BE7A6-EAAA-45E7-A4A0-7ABAB567BE78}</Project>
+      <Name>MenuRepresentation.DOMAIN</Name>
+    </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="Arch.cd" />
   </ItemGroup>

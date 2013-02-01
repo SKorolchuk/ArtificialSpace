@@ -29,6 +29,7 @@ namespace MenuRepresentation.DOMAIN.MenuDOM.Model
 		public MenuItem(XElement ItemNode, IMenuable baseItm)
 			: base(ItemNode)
 		{
+			this.LoadItem(ItemNode);
 			baseItem = baseItm;
 		}
 
@@ -56,7 +57,7 @@ namespace MenuRepresentation.DOMAIN.MenuDOM.Model
 			}
 		}
 
-		public override void LoadItem(XElement ItemNode)
+		public virtual void LoadItem(XElement ItemNode)
 		{
 			base.LoadItem(ItemNode);
 			description = ItemNode.Attribute("description").Value ?? "";
